@@ -65,5 +65,36 @@ public class UserServiceImpl implements UserService {
 		}
 		return resp;
 	}
-
+	@Override
+	public ServerResponse<User> loginAdmin_logic(String username,String password)
+	{
+		ServerResponse<User> resp=new ServerResponse<User>();
+		List<User> users=new ArrayList<User>();
+		users=JdbcUtil.executeQuery("select * from user where userName=?", User.class, username);
+		if(users.size()==0) {
+			resp.setStatus(2);
+			resp.setMsg("用户不存在");
+		}
+		else if(!(users.get(0).getRole().equals("admin")))
+		{
+			resp.setStatus(3);
+			resp.setMsg("该用户不是管理员");
+		}
+		else {
+			users.clear();
+			users=JdbcUtil.executeQuery("select * from user where userName=?&&passWord=?", User.class, username,password);
+			if(users.size()==0)
+			{
+				resp.setStatus(1);
+				resp.setMsg("密码错误");
+			}
+			else
+			{
+				User user=users.get(0);
+				resp.setStatus(0);
+				resp.setData(user);
+			}
+		}
+		return resp;
+	}
 }

@@ -44,6 +44,10 @@ public class UserServlet extends HttpServlet {
 		{
 			register(request,response);
 		}
+		else if(type.equals("adminLogin"))
+		{
+			loginAdmin(request,response);
+		}
 	}
 
 	/**
@@ -98,7 +102,8 @@ public class UserServlet extends HttpServlet {
 		}
     }
     public ServerResponse changePassword(HttpServletRequest request, HttpServletResponse response) {
-     //�޸�����
+     //修改密码
+    	
     }
     public ServerResponse findPassword(HttpServletRequest request, HttpServletResponse response) {
     	//�һ�����
@@ -116,8 +121,24 @@ public class UserServlet extends HttpServlet {
     	//�˳���¼
     }
     //��̨
-    public ServerResponse loginAdmin(HttpServletRequest request, HttpServletResponse response) {
-      //����Ա��¼
+    public void loginAdmin(HttpServletRequest request, HttpServletResponse response) {
+      //管理员登录
+    	String username=request.getParameter("username");
+    	String password=request.getParameter("password");
+    	UserServiceImpl us=new UserServiceImpl();
+        
+        ServerResponse<User> sr=us.loginAdmin_logic(username, password);
+        Gson gson=new Gson();
+        String json=gson.toJson(sr);
+        
+        try {
+			PrintWriter pw=response.getWriter();
+			pw.print(json);
+			pw.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
     public ServerResponse listUser(HttpServletRequest request, HttpServletResponse response) {
     	//��ȡ�û��б�
