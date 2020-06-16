@@ -1,11 +1,15 @@
 package servlet;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.google.gson.Gson;
 
 import common.ServerResponse;
 import common.User;
@@ -31,7 +35,15 @@ public class UserServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		
+		String type=request.getParameter("type");
+		if(type.equals("login"))
+		{
+			login(request,response);
+		}
+		else if(type.equals("register"))
+		{
+			register(request,response);
+		}
 	}
 
 	/**
@@ -42,7 +54,7 @@ public class UserServlet extends HttpServlet {
 		doGet(request, response);
 	}
 	//ǰ̨
-    public ServerResponse login(HttpServletRequest request, HttpServletResponse response) {
+    public void login(HttpServletRequest request, HttpServletResponse response) {
     	//登录
     	String username = request.getParameter("username");
         String password = request.getParameter("password");
@@ -50,14 +62,22 @@ public class UserServlet extends HttpServlet {
         UserServiceImpl us=new UserServiceImpl();
         
         ServerResponse<User> sr=us.login_logic(username, password);
+        Gson gson=new Gson();
+        String json=gson.toJson(sr);
         
-    
-    	return null;
+        try {
+			PrintWriter pw=response.getWriter();
+			pw.print(json);
+			pw.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
-    public ServerResponse register(HttpServletRequest request, HttpServletResponse response) {
-    	//�û�ע��
+    public void register(HttpServletRequest request, HttpServletResponse response) {
+    	//注册
     	
-    	return null;
+    	
     }
     public ServerResponse changePassword(HttpServletRequest request, HttpServletResponse response) {
      //�޸�����
