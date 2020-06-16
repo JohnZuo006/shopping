@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.google.gson.Gson;
 
@@ -68,7 +69,15 @@ public class UserServlet extends HttpServlet {
         ServerResponse<User> sr=us.login_logic(username, password);
         Gson gson=new Gson();
         String json=gson.toJson(sr);
-        
+        if(sr.getStatus()==0)
+        {
+        	HttpSession session=request.getSession();
+        	session.setAttribute("username", sr.getData().getUserName());
+        	session.setAttribute("telephone", sr.getData().getTelephone());
+        	session.setAttribute("email", sr.getData().getEmail());
+        	session.setAttribute("role", sr.getData().getRole());
+        	session.setAttribute("id", sr.getData().getUserId());
+        }
         try {
 			PrintWriter pw=response.getWriter();
 			pw.print(json);
@@ -101,9 +110,25 @@ public class UserServlet extends HttpServlet {
 			e.printStackTrace();
 		}
     }
-    public ServerResponse changePassword(HttpServletRequest request, HttpServletResponse response) {
+    public void changePassword(HttpServletRequest request, HttpServletResponse response) {
      //修改密码
-    	
+    	String newPassword=request.getParameter("passwordNew");
+    	String oldPassword=request.getParameter("passwordOld");
+    	String username=(String) request.getSession().getAttribute("username");
+    	UserServiceImpl us=new UserServiceImpl();
+        
+        ServerResponse<User> sr=us.changePassword_logic(username,oldPassword, newPassword);
+        Gson gson=new Gson();
+        String json=gson.toJson(sr);
+        
+        try {
+			PrintWriter pw=response.getWriter();
+			pw.print(json);
+			pw.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
     public ServerResponse findPassword(HttpServletRequest request, HttpServletResponse response) {
     	//�һ�����

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+
 import common.ServerResponse;
 import common.User;
 import jdbcUtil.JdbcUtil;
@@ -93,6 +94,25 @@ public class UserServiceImpl implements UserService {
 				User user=users.get(0);
 				resp.setStatus(0);
 				resp.setData(user);
+			}
+		}
+		return resp;
+	}
+	public ServerResponse<User> changePassword_logic(String username,String oldPassword, String newPassword)
+	{
+		ServerResponse<User> resp=new ServerResponse<User>();
+		List<User> users=new ArrayList<User>();
+		users=JdbcUtil.executeQuery("select * from user where userName=?&&passWord=?", User.class, username,oldPassword);
+		if(users.size()==0) {
+			resp.setStatus(1);
+			resp.setMsg("原密码错误");
+		}
+		else {
+			int i=JdbcUtil.executeUpdate("update from user set passWord=? where userName=?", newPassword,username);
+			if(i==1)
+			{
+				resp.setStatus(0);
+				resp.setMsg("修改密码成功");
 			}
 		}
 		return resp;
