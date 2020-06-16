@@ -1,7 +1,7 @@
 package po;
 /**
 * @author zuoxinlei
-* @version 创建时间：2020年6月16日 下午2:04:31
+* @version 创建时间：2020年6月16日 下午1:55:31
 * 这是一个user的实体类
 */
 public class User {
