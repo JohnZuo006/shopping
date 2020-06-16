@@ -17,12 +17,12 @@ public class JdbcTest {
 //		int i=JdbcUtil.executeUpdate(sql, params);
 //		System.out.println(i);
 //		
-//		String sql2="select * from user";
+//		String sql2="select * from user where userName=?&&passWord=?";
 //		List<User> users=new ArrayList<>();
-//		users=JdbcUtil.executeQuery(sql2, User.class);
+//		users=JdbcUtil.executeQuery(sql2, User.class,"john","123456");
 //		System.out.println(users.get(0));
 		UserServiceImpl us=new UserServiceImpl();
-		ServerResponse<User> resp=us.login_logic("john", "123456");
+		ServerResponse<User> resp=us.login_logic("john1", "12356");
 		System.out.println(resp);
 	}
 }

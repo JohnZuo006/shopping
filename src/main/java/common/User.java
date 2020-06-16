@@ -4,6 +4,7 @@ package common;
 * @version 鍒涘缓鏃堕棿锛�2020骞�6鏈�16鏃� 涓嬪崍1:55:31
 * 杩欐槸涓�涓猽ser鐨勫疄浣撶被
 */
+import java.sql.Timestamp;
 public class User {
 	private int userId;
 	private String userName;
@@ -13,8 +14,8 @@ public class User {
 	private String role;
 	private String question;
 	private String answer;
-	private String createTime;
-	private String updateTime;
+	private Timestamp createTime;
+	private Timestamp updateTime;
 	public int getUserId() {
 		return userId;
 	}
@@ -63,20 +64,22 @@ public class User {
 	public void setAnswer(String answer) {
 		this.answer = answer;
 	}
-	public String getCreateTime() {
+	
+	public Timestamp getCreateTime() {
 		return createTime;
 	}
-	public void setCreateTime(String createTime) {
+	public void setCreateTime(Timestamp createTime) {
 		this.createTime = createTime;
 	}
-	public String getUpdateTime() {
+	public Timestamp getUpdateTime() {
 		return updateTime;
 	}
-	public void setUpdateTime(String updateTime) {
+	public void setUpdateTime(Timestamp updateTime) {
 		this.updateTime = updateTime;
 	}
+	
 	public User(int userId, String userName, String passWord, String telephone, String email, String role,
-			String question, String answer, String createTime, String updateTime) {
+			String question, String answer, Timestamp createTime, Timestamp updateTime) {
 		super();
 		this.userId = userId;
 		this.userName = userName;
