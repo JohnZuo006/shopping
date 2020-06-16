@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import common.ServerResponse;
+import common.User;
+import service.impl.UserServiceImpl;
 
 /**
  * Servlet implementation class UserServlet
@@ -41,41 +43,45 @@ public class UserServlet extends HttpServlet {
 	}
 	//Ç°Ì¨
     public ServerResponse login(HttpServletRequest request, HttpServletResponse response) {
-    	//ÓÃ»§µÇÂ¼
+    	//ç™»å½•
     	String username = request.getParameter("username");
         String password = request.getParameter("password");
+        
+        UserServiceImpl us=new UserServiceImpl();
+        
+        ServerResponse<User> sr=us.login_logic(username, password);
         
     
     	return null;
     }
     public ServerResponse register(HttpServletRequest request, HttpServletResponse response) {
-    	//ÓÃ»§×¢²á
+    	//ï¿½Ã»ï¿½×¢ï¿½ï¿½
     	
     	return null;
     }
     public ServerResponse changePassword(HttpServletRequest request, HttpServletResponse response) {
-     //ÐÞ¸ÄÃÜÂë
+     //ï¿½Þ¸ï¿½ï¿½ï¿½ï¿½ï¿½
     }
     public ServerResponse findPassword(HttpServletRequest request, HttpServletResponse response) {
-    	//ÕÒ»ØÃÜÂë
+    	//ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½
     }
     public ServerResponse changeInformation(HttpServletRequest request, HttpServletResponse response) {
-       //ÐÞ¸Ä¸öÈËÐÅÏ¢
+       //ï¿½Þ¸Ä¸ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢
         }
     public ServerResponse getInformation(HttpServletRequest request, HttpServletResponse response) {
-    	  //²é¿´¸öÈËÐÅÏ¢
+    	  //ï¿½é¿´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢
     }
     public ServerResponse checkName(HttpServletRequest request, HttpServletResponse response) {
-    	//¼ì²éÓÃ»§ÃûÊÇ·ñÓÐÐ§
+    	//ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½Ð§
     }
     public ServerResponse loginOut(HttpServletRequest request, HttpServletResponse response) {
-    	//ÍË³öµÇÂ¼
+    	//ï¿½Ë³ï¿½ï¿½ï¿½Â¼
     }
-    //ºóÌ¨
+    //ï¿½ï¿½Ì¨
     public ServerResponse loginAdmin(HttpServletRequest request, HttpServletResponse response) {
-      //¹ÜÀíÔ±µÇÂ¼
+      //ï¿½ï¿½ï¿½ï¿½Ô±ï¿½ï¿½Â¼
     }
     public ServerResponse listUser(HttpServletRequest request, HttpServletResponse response) {
-    	//»ñÈ¡ÓÃ»§ÁÐ±í
+    	//ï¿½ï¿½È¡ï¿½Ã»ï¿½ï¿½Ð±ï¿½
     }
 }
