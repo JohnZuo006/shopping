@@ -76,8 +76,26 @@ public class UserServlet extends HttpServlet {
     }
     public void register(HttpServletRequest request, HttpServletResponse response) {
     	//注册
-    	
-    	
+    	String username=request.getParameter("username");
+    	String password=request.getParameter("password");
+    	String telephone=request.getParameter("telephone");
+    	String email=request.getParameter("email");
+    	String role=request.getParameter("role");
+    	String question=request.getParameter("question");
+    	String answer=request.getParameter("answer");
+    	User user=new User(0, username, password, telephone, email, role, question, answer, null, null);
+    	UserServiceImpl us=new UserServiceImpl();
+    	ServerResponse<User> sr=us.register_logic(user);
+        Gson gson=new Gson();
+        String json=gson.toJson(sr);
+        try {
+			PrintWriter pw=response.getWriter();
+			pw.print(json);
+			pw.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
     public ServerResponse changePassword(HttpServletRequest request, HttpServletResponse response) {
      //�޸�����

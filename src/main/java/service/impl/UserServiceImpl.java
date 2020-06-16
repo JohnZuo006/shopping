@@ -1,6 +1,9 @@
 package service.impl;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import common.ServerResponse;
@@ -33,6 +36,31 @@ public class UserServiceImpl implements UserService {
 				User user=users.get(0);
 				resp.setStatus(0);
 				resp.setData(user);
+			}
+		}
+		return resp;
+	}
+	@Override
+	public ServerResponse<User> register_logic(User user)
+	{
+		ServerResponse<User> resp=new ServerResponse<User>();
+		List<User> users=new ArrayList<User>();
+		users=JdbcUtil.executeQuery("select * from user where userName=?", User.class, user.getUserName());
+		if(users.size()>0) {
+			resp.setStatus(1);
+			resp.setMsg("用户已存在");
+		}
+		else
+		{
+			String sql="insert into user(userName,passWord,telephone,email,role,question,answer,createTime) values(?,?,?,?,?,?,?,?)";
+			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			String ts=df.format(new Date());
+			Object[] params= {user.getUserName(),user.getPassWord(),user.getTelephone(),user.getEmail(),user.getRole(),user.getQuestion(),user.getAnswer(),ts};
+			int i=JdbcUtil.executeUpdate(sql, params);
+			if(i==1)
+			{
+				resp.setStatus(0);
+				resp.setMsg("校验成功");
 			}
 		}
 		return resp;
