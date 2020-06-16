@@ -1,9 +1,11 @@
 package common;
 /**
 * @author zuoxinlei
-* @version 创建时间：2020年6月16日 下午3:07:13
-* 类说明
+* @version 鍒涘缓鏃堕棿锛�2020骞�6鏈�16鏃� 涓嬪崍3:07:13
+* 绫昏鏄�
 */
-public class ServerResponse {
-
+public class ServerResponse<T> {
+    private int status;
+    private T data;
+    
 }
