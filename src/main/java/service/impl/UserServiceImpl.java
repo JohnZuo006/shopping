@@ -117,4 +117,32 @@ public class UserServiceImpl implements UserService {
 		}
 		return resp;
 	}
+	public ServerResponse<User> checkAnswer_logic(String username,String question,String answer)
+	{
+		ServerResponse<User> resp=new ServerResponse<User>();
+		List<User> users=new ArrayList<User>();
+		users=JdbcUtil.executeQuery("select * from user where userName=?", User.class, username);
+		if(users.size()==0) {
+			resp.setStatus(1);
+			resp.setMsg("密保问题验证错误");
+		}
+		else {
+			resp.setStatus(0);
+			resp.setMsg("密保问题验证成功");
+		}
+		return resp;
+	}
+	public ServerResponse<User> findPassword_logic(String username,String password){
+		ServerResponse<User> resp=new ServerResponse<User>();
+		int i=JdbcUtil.executeUpdate("update from user set passWord=? where userName=?", password,username);
+		if(i==1) {
+			resp.setStatus(0);
+			resp.setMsg("重置密码成功");
+		}
+		else {
+			resp.setStatus(1);
+			resp.setMsg("重置密码失败");
+		}
+		return resp;
+	}
 }

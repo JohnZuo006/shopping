@@ -36,19 +36,6 @@ public class UserServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		String type=request.getParameter("type");
-		if(type.equals("login"))
-		{
-			login(request,response);
-		}
-		else if(type.equals("register"))
-		{
-			register(request,response);
-		}
-		else if(type.equals("adminLogin"))
-		{
-			loginAdmin(request,response);
-		}
 	}
 
 	/**
@@ -58,7 +45,6 @@ public class UserServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
-	//ǰ̨
     public void login(HttpServletRequest request, HttpServletResponse response) {
     	//登录
     	String username = request.getParameter("username");
@@ -130,8 +116,46 @@ public class UserServlet extends HttpServlet {
 			e.printStackTrace();
 		}
     }
-    public ServerResponse findPassword(HttpServletRequest request, HttpServletResponse response) {
-    	//�һ�����
+    public void checkAnswer(HttpServletRequest request, HttpServletResponse response) {
+    	//验证密保问题
+    	HttpSession session=request.getSession();
+    	String username=(String) session.getAttribute("useranme");
+    	String question=request.getParameter("question");
+    	String answer=request.getParameter("answer");
+    	UserServiceImpl us=new UserServiceImpl();
+        
+        ServerResponse<User> sr=us.checkAnswer_logic(username,question, answer);
+        Gson gson=new Gson();
+        String json=gson.toJson(sr);
+        
+        try {
+			PrintWriter pw=response.getWriter();
+			pw.print(json);
+			pw.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+    public void findPassword(HttpServletRequest request, HttpServletResponse response) {
+    	//找回密码
+    	HttpSession session=request.getSession();
+    	String username=(String) session.getAttribute("useranme");
+    	String password=request.getParameter("newPassword");
+    	UserServiceImpl us=new UserServiceImpl();
+        
+        ServerResponse<User> sr=us.findPassword_logic(username,password);
+        Gson gson=new Gson();
+        String json=gson.toJson(sr);
+        
+        try {
+			PrintWriter pw=response.getWriter();
+			pw.print(json);
+			pw.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
     public ServerResponse changeInformation(HttpServletRequest request, HttpServletResponse response) {
        //�޸ĸ�����Ϣ
