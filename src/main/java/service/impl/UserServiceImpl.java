@@ -34,6 +34,7 @@ public class UserServiceImpl implements UserService {
 			else
 			{
 				User user=users.get(0);
+				user.setPassWord("");
 				resp.setStatus(0);
 				resp.setData(user);
 			}
