@@ -121,7 +121,7 @@ public class UserServiceImpl implements UserService {
 	{
 		ServerResponse<User> resp=new ServerResponse<User>();
 		List<User> users=new ArrayList<User>();
-		users=JdbcUtil.executeQuery("select * from user where userName=?", User.class, username);
+		users=JdbcUtil.executeQuery("select * from user where userName=?&&question=?&&answer=?", User.class, username,question,answer);
 		if(users.size()==0) {
 			resp.setStatus(1);
 			resp.setMsg("密保问题验证错误");
@@ -153,8 +153,8 @@ public class UserServiceImpl implements UserService {
 		osr.getData().setEmail(user.getEmail());
 		osr.getData().setQuestion(user.getQuestion());
 		osr.getData().setAnswer(user.getAnswer());
-		String sql="SELECT * FROM user WHERE userid="+osr.getData().getUserId();
-		int re = JdbcUtil.executeUpdate(sql, osr);
+		String sql="SELECT * FROM user WHERE userid=?";
+		int re = JdbcUtil.executeUpdate(sql, osr,osr.getData().getUserId());
 		ServerResponse<String> sr=new ServerResponse<String>();
 		if(re==1) {
 			sr.setStatus(0);
@@ -169,8 +169,8 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public ServerResponse<User> getinformation_logic(String username) { //获取个人信息
 		// TODO Auto-generated method stub
-		String sql="SELECT * from user where username="+username;
-		List<User> list=JdbcUtil.executeQuery(sql,User.class);
+		String sql="SELECT * from user where username=?";
+		List<User> list=JdbcUtil.executeQuery(sql,User.class,username);
 		User user = list.get(0);
 		 ServerResponse<User> sr = new ServerResponse<User>();
 		 sr.setStatus(0);
@@ -196,8 +196,8 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public ServerResponse<List> listuser_logic(String role) {   //查询列表
 		// TODO Auto-generated method stub
-		String sql="SELECT * from user where role="+role;
-		 List<User> list=JdbcUtil.executeQuery(sql,User.class);
+		String sql="SELECT * from user where role=?";
+		 List<User> list=JdbcUtil.executeQuery(sql,User.class,role);
 		 ServerResponse<List> sr = new ServerResponse<List>();
 		 sr.setStatus(0);
 		 sr.setData(list);

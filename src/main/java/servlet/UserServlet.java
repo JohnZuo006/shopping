@@ -155,8 +155,7 @@ public class UserServlet extends HttpServlet {
 
 	public void checkAnswer(HttpServletRequest request, HttpServletResponse response) {
 		// 验证密保问题
-		HttpSession session = request.getSession();
-		String username = (String) session.getAttribute("useranme");
+		String username = request.getParameter("username");
 		String question = request.getParameter("question");
 		String answer = request.getParameter("answer");
 		UserServiceImpl us = new UserServiceImpl();
