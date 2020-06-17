@@ -27,7 +27,7 @@ public class CategoryServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		String r=request.getParameter("s");
 	}
 
 	/**
@@ -37,5 +37,20 @@ public class CategoryServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
-
+	private void get_category(HttpServletRequest request, HttpServletResponse response)
+	{
+		//获取类别（平级）
+	}
+	private void add_category(HttpServletRequest request, HttpServletResponse response)
+	{
+		//添加类别
+	}
+	private void change_category_name(HttpServletRequest request, HttpServletResponse response)
+	{
+		//更改类别名字
+	}
+	private void get_deep_category(HttpServletRequest request, HttpServletResponse response)
+	{
+		//获取当前类别以及子类别
+	}
 }
