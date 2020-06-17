@@ -1,9 +1,5 @@
 package common;
-/**
-* @author zuoxinlei
-* @version 鍒涘缓鏃堕棿锛�2020骞�6鏈�16鏃� 涓嬪崍1:55:31
-* 杩欐槸涓�涓猽ser鐨勫疄浣撶被
-*/
+
 import java.sql.Timestamp;
 public class User {
 	private int userId;

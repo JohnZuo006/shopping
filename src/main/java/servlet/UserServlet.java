@@ -40,27 +40,32 @@ public class UserServlet extends HttpServlet {
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		String type = request.getParameter("type");
-		if (type.equals("login"))
-			login(request, response);
-		else if (type.equals("register"))
-			register(request, response);
-		else if (type.equals("changePassword"))
-			changePassword(request, response);
-		else if (type.equals("findPassword"))
-			findPassword(request, response);
-		else if (type.equals("changeInformation"))
-			changeInformation(request, response);
-		else if (type.equals("getInformation"))
-			getInformation(request, response);
-		else if (type.equals("checkName"))
-			checkName(request, response);
-		else if (type.equals("loginOut"))
-			loginOut(request, response);
-		else if (type.equals("loginAdmin"))
-			loginAdmin(request, response);
-		else if (type.equals("listUser"))
-			listUser(request, response);
-
+		if(type!=null)
+		{
+			if (type.equals("login"))
+				login(request, response);
+			else if (type.equals("register"))
+				register(request, response);
+			else if (type.equals("changePassword"))
+				changePassword(request, response);
+			else if (type.equals("findPassword"))
+				findPassword(request, response);
+			else if (type.equals("changeInformation"))
+				changeInformation(request, response);
+			else if (type.equals("getInformation"))
+				getInformation(request, response);
+			else if (type.equals("checkName"))
+				checkName(request, response);
+			else if (type.equals("loginOut"))
+				loginOut(request, response);
+			else if (type.equals("loginAdmin"))
+				loginAdmin(request, response);
+			else if (type.equals("listUser"))
+				listUser(request, response);
+			else if(type.equals("checkAnswer"))
+				checkAnswer(request, response);
+		}
+		
 	}
 
 	/**
