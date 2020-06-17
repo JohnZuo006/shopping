@@ -169,7 +169,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public ServerResponse<User> getinformation_logic(String username) { //获取个人信息
 		// TODO Auto-generated method stub
-		String sql="SELECT * from user where username=?";
+		String sql="SELECT * from user where userName=?";
 		List<User> list=JdbcUtil.executeQuery(sql,User.class,username);
 		User user = list.get(0);
 		 ServerResponse<User> sr = new ServerResponse<User>();

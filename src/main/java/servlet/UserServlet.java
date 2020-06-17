@@ -39,6 +39,16 @@ public class UserServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		/* 允许跨域的主机地址 */
+		response.setHeader("Access-Control-Allow-Origin", "http://localhost:8848");
+		/* 允许跨域的请求方法GET, POST, HEAD 等 */
+		response.setHeader("Access-Control-Allow-Methods", "*");
+		/* 重新预检验跨域的缓存时间 (s) */
+		response.setHeader("Access-Control-Max-Age", "3600");
+		/* 允许跨域的请求头 */
+		response.setHeader("Access-Control-Allow-Headers", "*");
+		/* 是否携带cookie */
+		response.setHeader("Access-Control-Allow-Credentials", "true");
 		response.setHeader("content-type", "text/html;charset=UTF-8");
 		response.setCharacterEncoding("UTF-8");
 		String type = request.getParameter("type");
@@ -224,7 +234,8 @@ public class UserServlet extends HttpServlet {
 
 	public void getInformation(HttpServletRequest request, HttpServletResponse response) {
 		// 查看个人信息
-		String username = request.getParameter("username");
+		//String username = request.getParameter("username");
+		String username=(String) request.getSession().getAttribute("username");
 		UserServiceImpl us = new UserServiceImpl();
 		ServerResponse<User> sr = us.getinformation_logic(username);
 
