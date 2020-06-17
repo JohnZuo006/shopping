@@ -144,4 +144,63 @@ public class UserServiceImpl implements UserService {
 		}
 		return resp;
 	}
+	@Override
+	public ServerResponse<String> changeinformation_logic(User user) {
+		// TODO Auto-generated method stub
+		ServerResponse<User> osr = getinformation_logic(user.getUserName());
+		osr.getData().setTelephone(user.getTelephone());
+		osr.getData().setEmail(user.getEmail());
+		osr.getData().setQuestion(user.getQuestion());
+		osr.getData().setAnswer(user.getAnswer());
+		String sql="SELECT * FROM user WHERE userid="+osr.getData().getUserId();
+		int re = JdbcUtil.executeUpdate(sql, osr);
+		ServerResponse<String> sr=new ServerResponse<String>();
+		if(re==1) {
+			sr.setStatus(0);
+			sr.setData("更新个人信息成功");
+		}else {
+			sr.setStatus(1);
+			sr.setData("更新失败");
+		}
+			
+		return null;
+	}
+	@Override
+	public ServerResponse<User> getinformation_logic(String username) { //获取个人信息
+		// TODO Auto-generated method stub
+		String sql="SELECT * from user where username="+username;
+		List<User> list=JdbcUtil.executeQuery(sql,User.class);
+		User user = list.get(0);
+		 ServerResponse<User> sr = new ServerResponse<User>();
+		 sr.setStatus(0);
+		 sr.setData(user);
+		return sr;
+	}
+	@Override
+	public ServerResponse<String> checkname_logic(String username) {  //检查名字
+		// TODO Auto-generated method stub
+		ServerResponse<User> sr = getinformation_logic(username);
+		ServerResponse<String> re = new  ServerResponse<String>();
+		if(sr.getData().getUserName().equals(username)) {
+			re.setData("用户已存在");
+			re.setStatus(1);
+		}else {
+			re.setData("校验成功");
+			re.setStatus(0);
+		}
+		return re;
+	}
+	
+	
+	@Override
+	public ServerResponse<List> listuser_logic(String role) {   //查询列表
+		// TODO Auto-generated method stub
+		String sql="SELECT * from user where role="+role;
+		 List<User> list=JdbcUtil.executeQuery(sql,User.class);
+		 ServerResponse<List> sr = new ServerResponse<List>();
+		 sr.setStatus(0);
+		 sr.setData(list);
+		 return sr;
+	}
+	
 }
