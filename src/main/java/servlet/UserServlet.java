@@ -39,8 +39,9 @@ public class UserServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		String originHeader=request.getHeader("Origin");
 		/* 允许跨域的主机地址 */
-		response.setHeader("Access-Control-Allow-Origin", "http://127.0.0.1:8848");
+		response.setHeader("Access-Control-Allow-Origin", originHeader);
 		/* 允许跨域的请求方法GET, POST, HEAD 等 */
 		response.setHeader("Access-Control-Allow-Methods", "*");
 		/* 重新预检验跨域的缓存时间 (s) */

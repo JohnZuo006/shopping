@@ -35,6 +35,7 @@ public class UserServiceImpl implements UserService {
 			{
 				User user=users.get(0);
 				user.setPassWord("");
+				user.setAnswer("");
 				resp.setStatus(0);
 				resp.setData(user);
 			}
