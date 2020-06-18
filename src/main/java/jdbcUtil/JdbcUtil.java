@@ -125,4 +125,23 @@ public class JdbcUtil {
         }
         return list;
     }
+    public static void main(String[] args) {
+    	int result=0;
+    	String sql="select count(*) as count from user";
+        Connection con=getConnection();
+        PreparedStatement pstmt=null;
+        ResultSet rs=null;
+        try {
+            pstmt=con.prepareStatement(sql);
+            rs=pstmt.executeQuery();
+            rs.next();
+            result=rs.getInt("count");
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        finally{
+            close(con,pstmt);
+        }
+        System.out.println(result);
+	}
 }
