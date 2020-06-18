@@ -21,7 +21,7 @@ public class Address {
 	}
 	public Address(int addressId, int userId, String receiverName, String receiverPhone, String receiverMobile,
 			String receiverProvince, String receiverCity, String receiverDistrict, String receiverAddress,
-			String receiverZip, Timestamp createTime, Timestamp updateTime) {
+			String receiverZip) {
 		super();
 		this.addressId = addressId;
 		this.userId = userId;
@@ -33,8 +33,6 @@ public class Address {
 		this.receiverDistrict = receiverDistrict;
 		this.receiverAddress = receiverAddress;
 		this.receiverZip = receiverZip;
-		this.createTime = createTime;
-		this.updateTime = updateTime;
 	}
 	public int getAddressId() {
 		return addressId;
