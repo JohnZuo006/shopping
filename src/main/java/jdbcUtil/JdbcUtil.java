@@ -157,11 +157,11 @@ public class JdbcUtil {
 			rs=pstmt.executeQuery();
 	        rs.next();
 	        result=rs.getInt("count");
+	        close(con, pstmt, rs);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-    	
     	return result;
     }
 }

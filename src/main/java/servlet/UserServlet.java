@@ -84,7 +84,6 @@ public class UserServlet extends HttpServlet {
 				changeQuestion(request, response);
 
 		}
-		
 	}
 
 	/**
@@ -101,9 +100,7 @@ public void login(HttpServletRequest request, HttpServletResponse response) {  /
 		
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
-
 		UserServiceImpl us = new UserServiceImpl();
-
 		ServerResponse<User> sr = us.login_logic(username, password);
 		Gson gson = new Gson();
 		String json = gson.toJson(sr);
@@ -376,8 +373,8 @@ public void login(HttpServletRequest request, HttpServletResponse response) {  /
 		else
 		{
 			String role ="";// request.getParameter("role");
-			String pageSize=request.getParameter("pageSize");
-			String pageNum=request.getParameter("pageNum");
+			String pageSize=request.getParameter("limit");
+			String pageNum=request.getParameter("page");
 			if(pageSize==null||pageSize=="")
 			{
 				pageSize="10";
@@ -400,5 +397,6 @@ public void login(HttpServletRequest request, HttpServletResponse response) {  /
 		}
 		pw.write(json);
 		pw.close();
+		System.out.println("传出完成");
 	}
 }

@@ -37,8 +37,9 @@ public class ProductServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		String originHeader=request.getHeader("Origin");
 		/* 允许跨域的主机地址 */
-		response.setHeader("Access-Control-Allow-Origin", "http://localhost:8080");
+		response.setHeader("Access-Control-Allow-Origin", originHeader);
 		/* 允许跨域的请求方法GET, POST, HEAD 等 */
 		response.setHeader("Access-Control-Allow-Methods", "*");
 		/* 重新预检验跨域的缓存时间 (s) */
@@ -101,8 +102,8 @@ public class ProductServlet extends HttpServlet {
 		}
 		else
 		{
-			String pageSize=request.getParameter("pageSize");
-			String pageNum=request.getParameter("pageNum");
+			String pageSize=request.getParameter("limit");
+			String pageNum=request.getParameter("page");
 			if(pageNum==null||pageNum=="")
 			{
 				pageNum="1";
