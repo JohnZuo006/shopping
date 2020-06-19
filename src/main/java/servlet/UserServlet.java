@@ -368,6 +368,14 @@ public void login(HttpServletRequest request, HttpServletResponse response) {  /
 		String role ="";// request.getParameter("role");
 		String pageSize=request.getParameter("pageSize");
 		String pageNum=request.getParameter("pageNum");
+		if(pageSize==null)
+		{
+			pageSize="3";
+		}
+		if(pageNum==null)
+		{
+			pageNum="1";
+		}
 		UserServiceImpl us = new UserServiceImpl();
 		ServerResponse<Page<List<User>>> sr = us.listuser_logic(role,Integer.parseInt(pageSize),Integer.parseInt(pageNum));
 
