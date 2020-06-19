@@ -113,12 +113,54 @@ public class AddressServlet extends HttpServlet {
 			pw.write(json);
 			pw.close();
 		}
-		
-		
 	}
 	private void delete(HttpServletRequest request, HttpServletResponse response)
 	{
-		
+		ServerResponse<Address> sr = new ServerResponse<>();
+		String receiverName=request.getParameter("receiverName");
+		String receiverPhone=request.getParameter("receiverPhone");
+		String receiverMobile=request.getParameter("receiverMobile");
+		String receiverProvince=request.getParameter("receiverProvince");
+		String receiverCity=request.getParameter("receiverCity");
+		String receiverDistrict=request.getParameter("receiverDistrict");
+		String receiverAddress=request.getParameter("receiverAddress");
+		String receiverZip=request.getParameter("receiverZip");
+		String userId=(String) request.getSession().getAttribute("UserId");
+		String addressId=request.getParameter("addressId");
+		if(userId==null||userId=="")
+		{
+			sr.setStatus(0);
+			sr.setMsg("更新地址失败");
+		}
+		else
+		{
+			Address address=new Address();
+			address.setReceiverAddress(receiverAddress);
+			address.setReceiverCity(receiverCity);
+			address.setReceiverDistrict(receiverDistrict);
+			address.setReceiverMobile(receiverMobile);
+			address.setReceiverName(receiverName);
+			address.setReceiverPhone(receiverPhone);
+			address.setReceiverProvince(receiverProvince);
+			address.setReceiverZip(receiverZip);
+			address.setUserId(Integer.parseInt(userId));
+			address.setAddressId(Integer.parseInt(addressId));
+			AddressServiceImpl as=new AddressServiceImpl();
+			sr=as.add_address_logic(address);
+			
+
+			Gson gson = new Gson();
+			String json = gson.toJson(sr);
+
+			PrintWriter pw = null;
+			try {
+				pw = response.getWriter();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			pw.write(json);
+			pw.close();
+		}
 	}
 	private void update(HttpServletRequest request, HttpServletResponse response)
 	{

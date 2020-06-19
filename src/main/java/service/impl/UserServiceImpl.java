@@ -10,6 +10,7 @@ import common.ServerResponse;
 import common.User;
 import jdbcUtil.JdbcUtil;
 import service.UserService;
+import vo.Page;
 
 public class UserServiceImpl implements UserService {
 
@@ -195,14 +196,24 @@ public class UserServiceImpl implements UserService {
 	
 	
 	@Override
-	public ServerResponse<List> listuser_logic(String role) {   //查询列表
+	public ServerResponse<Page<List<User>>> listuser_logic(String role) {   //查询列表
 		// TODO Auto-generated method stub
-		String sql="SELECT * from user where role=?";
-		 List<User> list=JdbcUtil.executeQuery(sql,User.class,role);
-		 ServerResponse<List> sr = new ServerResponse<List>();
-		 sr.setStatus(0);
-		 sr.setData(list);
-		 return sr;
+//		String sql="SELECT * from user where role=?";
+//		 List<User> list=JdbcUtil.executeQuery(sql,User.class,role);
+//		 ServerResponse<List> sr = new ServerResponse<List>();
+//		 sr.setStatus(0);
+//		 sr.setData(list);
+//		 System.out.println(list);
+//		 return sr;
+		ServerResponse<Page<List<User>>> resp=new ServerResponse<Page<List<User>>>();
+		//获取数据库中数据总数
+		String sql="select * from user";
+		int i=JdbcUtil.getSum(sql);
+		System.out.println(i);
+		return resp;
 	}
-	
+	public static void main(String[] args) {
+		UserServiceImpl us=new UserServiceImpl();
+		us.listuser_logic("13");
+	}
 }

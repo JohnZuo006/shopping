@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane.RestoreAction;
+
 import com.alibaba.druid.pool.DruidDataSource;
 
 public class JdbcUtil {
@@ -144,4 +146,22 @@ public class JdbcUtil {
         }
         System.out.println(result);
 	}
+    public static int getSum(String sql,Object... params)
+    {
+    	int result =0;
+    	Connection con=getConnection();
+    	PreparedStatement pstmt=null;
+    	ResultSet rs=null;
+    	try {
+			pstmt=con.prepareStatement(sql);
+			rs=pstmt.executeQuery();
+	        rs.next();
+	        result=rs.getInt("count");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	
+    	return result;
+    }
 }

@@ -37,7 +37,9 @@ public class AddressServiceImpl implements IAddressService {
 	@Override
 	public ServerResponse<Address> update_address_logic(Address address) {
 		// TODO Auto-generated method stub
-		return null;
+		ServerResponse<Address> resp=new ServerResponse<Address>();
+		
+		return resp;
 	}
 
 	@Override

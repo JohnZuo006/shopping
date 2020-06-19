@@ -16,6 +16,7 @@ import com.google.gson.Gson;
 import common.ServerResponse;
 import common.User;
 import service.impl.UserServiceImpl;
+import vo.Page;
 
 /**
  * Servlet implementation class UserServlet
@@ -306,8 +307,10 @@ public class UserServlet extends HttpServlet {
 	public void listUser(HttpServletRequest request, HttpServletResponse response) {
 		// 用户列表
 		String role = request.getParameter("role");
+		String pageSize=request.getParameter("pageSize");
+		String pageNum=request.getParameter("pageNum");
 		UserServiceImpl us = new UserServiceImpl();
-		ServerResponse<List> sr = us.listuser_logic(role);
+		ServerResponse<Page<List<User>>> sr = us.listuser_logic(role);
 
 		Gson gson = new Gson();
 		String json = gson.toJson(sr);
