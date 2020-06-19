@@ -78,6 +78,11 @@ public class UserServlet extends HttpServlet {
 				listUser(request, response);
 			else if(type.equals("checkAnswer"))
 				checkAnswer(request, response);
+			else if(type.equals("findQuestion"))
+				findQuestion(request, response);
+			else if(type.equals("changeQuestion"))
+				changeQuestion(request, response);
+
 		}
 		
 	}
@@ -92,8 +97,8 @@ public class UserServlet extends HttpServlet {
 		doGet(request, response);
 	}
 
-	public void login(HttpServletRequest request, HttpServletResponse response) {
-		// 登录
+public void login(HttpServletRequest request, HttpServletResponse response) {  // 登录
+		
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
 
@@ -104,11 +109,8 @@ public class UserServlet extends HttpServlet {
 		String json = gson.toJson(sr);
 		if (sr.getStatus() == 0) {
 			HttpSession session = request.getSession();
+			session.setAttribute("userid", sr.getData().getUserId());
 			session.setAttribute("username", sr.getData().getUserName());
-			session.setAttribute("telephone", sr.getData().getTelephone());
-			session.setAttribute("email", sr.getData().getEmail());
-			session.setAttribute("role", sr.getData().getRole());
-			session.setAttribute("id", sr.getData().getUserId());
 		}
 		try {
 			PrintWriter pw = response.getWriter();
@@ -120,8 +122,8 @@ public class UserServlet extends HttpServlet {
 		}
 	}
 
-	public void register(HttpServletRequest request, HttpServletResponse response) {
-		// 注册
+	public void register(HttpServletRequest request, HttpServletResponse response) {// 注册
+		
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
 		String telephone = request.getParameter("telephone");
@@ -144,8 +146,8 @@ public class UserServlet extends HttpServlet {
 		}
 	}
 
-	public void changePassword(HttpServletRequest request, HttpServletResponse response) {
-		// 修改密码
+	public void changePassword(HttpServletRequest request, HttpServletResponse response) {// 修改密码
+		
 		String newPassword = request.getParameter("passwordNew");
 		String oldPassword = request.getParameter("passwordOld");
 		String username = (String) request.getSession().getAttribute("username");
@@ -165,9 +167,10 @@ public class UserServlet extends HttpServlet {
 		}
 	}
 
-	public void checkAnswer(HttpServletRequest request, HttpServletResponse response) {
-		// 验证密保问题
-		String username = request.getParameter("username");
+	public void checkAnswer(HttpServletRequest request, HttpServletResponse response) { // 验证密保问题
+		
+		String username = (String) request.getSession().getAttribute("username");
+		//String username = request.getParameter("username");
 		String question = request.getParameter("question");
 		String answer = request.getParameter("answer");
 		UserServiceImpl us = new UserServiceImpl();
@@ -186,13 +189,12 @@ public class UserServlet extends HttpServlet {
 		}
 	}
 
-	public void findPassword(HttpServletRequest request, HttpServletResponse response) {
-		// 找回密码
-		HttpSession session = request.getSession();
-		String username = (String) session.getAttribute("useranme");
+	public void findPassword(HttpServletRequest request, HttpServletResponse response) {	// 找回密码
+	
+	
+		String username = request.getParameter("username");
 		String password = request.getParameter("newPassword");
 		UserServiceImpl us = new UserServiceImpl();
-
 		ServerResponse<User> sr = us.findPassword_logic(username, password);
 		Gson gson = new Gson();
 		String json = gson.toJson(sr);
@@ -207,18 +209,18 @@ public class UserServlet extends HttpServlet {
 		}
 	}
 
-	public void changeInformation(HttpServletRequest request, HttpServletResponse response) {
-		// 更改个人信息
-		User user = new User();
-		user.setUserName(request.getParameter("username"));
-		user.setPassWord(request.getParameter("password"));
-		user.setTelephone(request.getParameter("telephone"));
-		user.setEmail(request.getParameter("email"));
-		user.setRole(request.getParameter("role"));
-		user.setQuestion(request.getParameter("question"));
-		user.setAnswer(request.getParameter("answer"));
+	public void changeInformation(HttpServletRequest request, HttpServletResponse response) {// 更改个人信息
+		
+		String username=(String) request.getSession().getAttribute("username");
+		//String username=request.getParameter("username");
+		//user.setPassWord(request.getParameter("password"));
+		String telephone=request.getParameter("telephone");
+		String email=request.getParameter("email");
+		//user.setRole(request.getParameter("role"));
+		//String question=request.getParameter("question");
+		//String answer=request.getParameter("answer");
 		UserServiceImpl us = new UserServiceImpl();
-		ServerResponse<String> sr = us.changeinformation_logic(user);
+		ServerResponse<User> sr = us.changeinformation_logic(telephone,email,username);
 
 		Gson gson = new Gson();
 		String json = gson.toJson(sr);
@@ -234,8 +236,8 @@ public class UserServlet extends HttpServlet {
 
 	}
 
-	public void getInformation(HttpServletRequest request, HttpServletResponse response) {
-		// 查看个人信息
+	public void getInformation(HttpServletRequest request, HttpServletResponse response) {// 查看个人信息
+		
 		//String username = request.getParameter("username");
 		String username=(String) request.getSession().getAttribute("username");
 		UserServiceImpl us = new UserServiceImpl();
@@ -255,11 +257,11 @@ public class UserServlet extends HttpServlet {
 
 	}
 
-	public void checkName(HttpServletRequest request, HttpServletResponse response) {
-		// 检查名字是否存在
+	public void checkName(HttpServletRequest request, HttpServletResponse response) {	// 检查名字是否存在
+	
 		String username = request.getParameter("username");
 		UserServiceImpl us = new UserServiceImpl();
-		ServerResponse<String> sr = us.checkname_logic(username);
+		ServerResponse<User> sr = us.checkname_logic(username);
 
 		Gson gson = new Gson();
 		String json = gson.toJson(sr);
@@ -275,17 +277,75 @@ public class UserServlet extends HttpServlet {
 
 	}
 
-	public void loginOut(HttpServletRequest request, HttpServletResponse response) {
-		// 退出登录
-		String username = request.getParameter("username");
+	public void loginOut(HttpServletRequest request, HttpServletResponse response) {// 退出登录
+		
+		String username = (String) request.getSession().getAttribute("username");
 		request.getSession().removeAttribute(username);
 		request.getSession().invalidate();
+		ServerResponse<User> sr =new ServerResponse<User>();
+		Object user=request.getSession().getAttribute("username");
+		if(user==null) { //session失效
+			sr.setStatus(0);
+			sr.setMsg("请登录账号");
+		}else {
+			sr.setStatus(1);
+			sr.setMsg("用户"+username+"在线");
+		}
+		Gson gson = new Gson();
+		String json = gson.toJson(sr);
 
+		PrintWriter pw = null;
+		try {
+			pw = response.getWriter();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		pw.write(json);
+		pw.close();
 	}
 
+	public void findQuestion(HttpServletRequest request, HttpServletResponse response) { //通过用户名找到密保问题
+		String username = request.getParameter("username");
+		UserServiceImpl us = new UserServiceImpl();
+		ServerResponse<User> sr = us.getinformation_logic(username);
+
+		Gson gson = new Gson();
+		String json = gson.toJson(sr);
+
+		PrintWriter pw = null;
+		try {
+			pw = response.getWriter();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		pw.write(json);
+		pw.close();
+		
+	}
+	
+	public void changeQuestion(HttpServletRequest request, HttpServletResponse response) { //更改密保问题
+		
+		String username=(String) request.getSession().getAttribute("username");
+		String question=request.getParameter("question");
+		String answer=request.getParameter("answer");
+		UserServiceImpl us = new UserServiceImpl();
+		ServerResponse<User> sr = us.changequestion_logic(question,answer,username);
+
+		Gson gson = new Gson();
+		String json = gson.toJson(sr);
+
+		PrintWriter pw = null;
+		try {
+			pw = response.getWriter();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		pw.write(json);
+		pw.close();
+	}
 	// 后台
-	public void loginAdmin(HttpServletRequest request, HttpServletResponse response) {
-		// 管理员登录
+	public void loginAdmin(HttpServletRequest request, HttpServletResponse response) {// 管理员登录
+		
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
 		UserServiceImpl us = new UserServiceImpl();
@@ -303,7 +363,6 @@ public class UserServlet extends HttpServlet {
 			e.printStackTrace();
 		}
 	}
-
 	public void listUser(HttpServletRequest request, HttpServletResponse response) {
 		// 用户列表
 		String role = request.getParameter("role");
