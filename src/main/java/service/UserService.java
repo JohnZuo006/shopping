@@ -17,5 +17,5 @@ public interface UserService {
 	public ServerResponse<User> getinformation_logic(String username);
 	public ServerResponse<User> changequestion_logic(String question,String answer,String username);
 	public ServerResponse<User> checkname_logic(String username);
-	public ServerResponse<Page<List<User>>> listuser_logic(String role,int pageSize,int pageNum);
+	public ServerResponse<Page<List<User>>> listuser_logic(String role,String UserId,int pageSize,int pageNum);
 }

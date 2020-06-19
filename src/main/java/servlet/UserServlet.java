@@ -365,30 +365,39 @@ public void login(HttpServletRequest request, HttpServletResponse response) {  /
 	}
 	public void listUser(HttpServletRequest request, HttpServletResponse response) {
 		// 用户列表
-		String role ="";// request.getParameter("role");
-		String pageSize=request.getParameter("pageSize");
-		String pageNum=request.getParameter("pageNum");
-		if(pageSize==null)
+		ServerResponse<Page<List<User>>> sr = new ServerResponse<Page<List<User>>>();
+		String userId=(String) request.getSession().getAttribute("userId");
+		userId="1";//测试用
+		if(userId==null||userId=="")
 		{
-			pageSize="3";
+			sr.setStatus(1);
+			sr.setMsg("用户未登录");
 		}
-		if(pageNum==null)
+		else
 		{
-			pageNum="1";
+			String role ="";// request.getParameter("role");
+			String pageSize=request.getParameter("pageSize");
+			String pageNum=request.getParameter("pageNum");
+			if(pageSize==null||pageSize=="")
+			{
+				pageSize="10";
+			}
+			if(pageNum==null||pageNum=="")
+			{
+				pageNum="1";
+			}
+			UserServiceImpl us = new UserServiceImpl();
+			sr=us.listuser_logic(role,userId,Integer.parseInt(pageSize),Integer.parseInt(pageNum));
+			
 		}
-		UserServiceImpl us = new UserServiceImpl();
-		ServerResponse<Page<List<User>>> sr = us.listuser_logic(role,Integer.parseInt(pageSize),Integer.parseInt(pageNum));
-
 		Gson gson = new Gson();
 		String json = gson.toJson(sr);
-
 		PrintWriter pw = null;
 		try {
 			pw = response.getWriter();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
 		pw.write(json);
 		pw.close();
 	}

@@ -207,7 +207,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public ServerResponse<Page<List<User>>> listuser_logic(String role,int pageSize,int pageNum) { // 查询列表
+	public ServerResponse<Page<List<User>>> listuser_logic(String role,String userId,int pageSize,int pageNum) { // 查询列表
 		// TODO Auto-generated method stub
 //		String sql="SELECT * from user where role=?";
 //		 List<User> list=JdbcUtil.executeQuery(sql,User.class,role);
@@ -217,65 +217,77 @@ public class UserServiceImpl implements UserService {
 //		 System.out.println(list);
 //		 return sr;
 		ServerResponse<Page<List<User>>> resp = new ServerResponse<Page<List<User>>>();
-		// 获取数据库中数据总数
-		String sql = "select count(*) as count from user";
-		int sum = JdbcUtil.getSum(sql);
-		//计算分页总数
-		int pages=sum%pageSize==0?sum/pageSize:(sum/pageSize)+1;
-		System.out.println("pages="+pages);
-		System.out.println("sum="+sum);
-		//计算当前页的开始行和结束行
-		int startRow=(pageNum-1)*pageSize;
-		int endRow=startRow+pageSize>sum?sum:startRow+pageSize;
-		//获取当前页的数据
-		String sql2="select * from user limit ?,?";
-		List<User> list=JdbcUtil.executeQuery(sql2, User.class,startRow,pageSize );
-		
-		//将数据赋值到page里面
-		Page<List<User>> page=new Page<List<User>>();
-		page.setPages(pages);
-		page.setTotal(sum);
-		page.setEndRow(endRow);
-		page.setStartRow(startRow);
-		page.setList(list);
-		page.setPageNum(pageNum);
-		page.setPageSize(pageSize);
-		page.setFirstPage(1);
-		page.setLastPage(pages);
-		//判断分页的前后是否还有页
-		if(pageNum==1)
+		//判断用户是不是admin
+		String sql3="select * from user where userId=?";
+		List<User> list2=JdbcUtil.executeQuery(sql3, User.class, userId);
+		if(!list2.get(0).getRole().equals("admin"))
 		{
-			page.setFirstPage(true);
-			page.setPrePage(0);
-			page.setLastPage(false);
-			page.setNextPage(pageNum+1);
-			page.setHasNextPage(true);
-			page.setHasPreviousPage(false);
-		}
-		else if(pageNum==pages)
-		{
-			page.setFirstPage(false);
-			page.setLastPage(true);
-			page.setPrePage(pageNum-1);
-			page.setNextPage(0);
-			page.setHasNextPage(false);
-			page.setHasPreviousPage(true);
+			resp.setStatus(2);
+			resp.setMsg("没有权限");
 		}
 		else
 		{
-			page.setFirstPage(false);
-			page.setLastPage(false);
-			page.setPrePage(pageNum-1);
-			page.setNextPage(pageNum+1);
+			// 获取数据库中数据总数
+			String sql = "select count(*) as count from user";
+			int sum = JdbcUtil.getSum(sql);
+			//计算分页总数
+			int pages=sum%pageSize==0?sum/pageSize:(sum/pageSize)+1;
+			System.out.println("pages="+pages);
+			System.out.println("sum="+sum);
+			//计算当前页的开始行和结束行
+			int startRow=(pageNum-1)*pageSize;
+			int endRow=startRow+pageSize>sum?sum:startRow+pageSize;
+			//获取当前页的数据
+			String sql2="select * from user limit ?,?";
+			List<User> list=JdbcUtil.executeQuery(sql2, User.class,startRow,pageSize );
+			
+			//将数据赋值到page里面
+			Page<List<User>> page=new Page<List<User>>();
+			page.setPages(pages);
+			page.setTotal(sum);
+			page.setEndRow(endRow);
+			page.setStartRow(startRow);
+			page.setList(list);
+			page.setPageNum(pageNum);
+			page.setPageSize(pageSize);
+			page.setFirstPage(1);
+			page.setLastPage(pages);
+			//判断分页的前后是否还有页
+			if(pageNum==1)
+			{
+				page.setFirstPage(true);
+				page.setPrePage(0);
+				page.setLastPage(false);
+				page.setNextPage(pageNum+1);
+				page.setHasNextPage(true);
+				page.setHasPreviousPage(false);
+			}
+			else if(pageNum==pages)
+			{
+				page.setFirstPage(false);
+				page.setLastPage(true);
+				page.setPrePage(pageNum-1);
+				page.setNextPage(0);
+				page.setHasNextPage(false);
+				page.setHasPreviousPage(true);
+			}
+			else
+			{
+				page.setFirstPage(false);
+				page.setLastPage(false);
+				page.setPrePage(pageNum-1);
+				page.setNextPage(pageNum+1);
+			}
+			resp.setStatus(0);
+			resp.setData(page);;
 		}
-		resp.setStatus(0);
-		resp.setData(page);;
+		
 		return resp;
 	}
 
 	public static void main(String[] args) {
 		UserServiceImpl us = new UserServiceImpl();
-		ServerResponse<Page<List<User>>> resp=us.listuser_logic("13",3,1);
+		ServerResponse<Page<List<User>>> resp=us.listuser_logic("13","1",3,1);
 		System.out.println(resp.getData());
 	}
 }
