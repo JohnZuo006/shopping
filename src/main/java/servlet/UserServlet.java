@@ -365,11 +365,11 @@ public void login(HttpServletRequest request, HttpServletResponse response) {  /
 	}
 	public void listUser(HttpServletRequest request, HttpServletResponse response) {
 		// 用户列表
-		String role = request.getParameter("role");
+		String role ="";// request.getParameter("role");
 		String pageSize=request.getParameter("pageSize");
 		String pageNum=request.getParameter("pageNum");
 		UserServiceImpl us = new UserServiceImpl();
-		ServerResponse<Page<List<User>>> sr = us.listuser_logic(role);
+		ServerResponse<Page<List<User>>> sr = us.listuser_logic(role,Integer.parseInt(pageSize),Integer.parseInt(pageNum));
 
 		Gson gson = new Gson();
 		String json = gson.toJson(sr);

@@ -113,5 +113,13 @@ public class Page<T> {
 	public void setList(T list) {
 		this.list = list;
 	}
+	@Override
+	public String toString() {
+		return "Page [pageSize=" + pageSize + ", pageNum=" + pageNum + ", orderBy=" + orderBy + ", startRow=" + startRow
+				+ ", endRow=" + endRow + ", total=" + total + ", pages=" + pages + ", firstPage=" + firstPage
+				+ ", prePage=" + prePage + ", nextPage=" + nextPage + ", lastPage=" + lastPage + ", isFirstPage="
+				+ isFirstPage + ", isLastPage=" + isLastPage + ", hasPreviousPage=" + hasPreviousPage + ", hasNextPage="
+				+ hasNextPage + ", list=" + list + "]";
+	}
 	
 }
