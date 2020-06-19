@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
 
-import common.Address;
 import common.Product;
 import common.ServerResponse;
 import service.impl.ProductServiceImpl;
@@ -62,8 +61,6 @@ public class ProductServlet extends HttpServlet {
 				list(request, response);
 			}
 		}
-		
-		
 	}
 
 	/**
@@ -96,6 +93,7 @@ public class ProductServlet extends HttpServlet {
 	{
 		ServerResponse<Page<List<Product>>> sr = new ServerResponse<Page<List<Product>>>();
 		String userId=(String) request.getSession().getAttribute("userId");
+		userId="1";
 		if(userId==null||userId=="")
 		{
 			sr.setStatus(1);
