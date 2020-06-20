@@ -113,38 +113,56 @@
 						// 工具列点击事件
 						treeTable.on('tool(demoTreeTb)', function(obj) {
 							var event = obj.event;
-							if(event === 'del') {
+							if (event === 'del') {
 								layer.msg('前端删除成功');
 
 								obj.del();
-							} else if(event === 'edit') {
+							} else if (event === 'edit') {
 								//layer.msg('修改成功');
 								let re
 								console.log(obj)
-								layer.prompt({title: '请输入信息新的品类名', 
-								formType: 0
-								}, 
-								function(categoryName, index){
-									re=categoryName
-    								changeC(obj,categoryName)
-									layer.close(index)
-								});
-    								
-  								
+								layer.prompt({
+										title: '请输入信息新的品类名',
+										formType: 0
+									},
+									function(categoryName, index) {
+										re = categoryName
+										$.ajax({
+											type: "post",
+											url: "http://ser.zuoxinlei.top:38000/shopping/Category",
+											data: {
+												"type": "changeCategory",
+												"categoryName": categoryName,
+												"categoryId": obj.data.categoryId
+											},
+											success: function(res) {
+												if (res.status == 0) {
+													alert(res.msg)
+												} else {
+													alert(res.msg)
+												}
+											},
+											xhrFields: {
+												withCredentials: true
+											}
+										})
+
+										layer.close(index)
+									});
+
+
 								obj.update({
-									"categoryName":re
+									"categoryName": re
 								})
+							} else if (event === "detail") {
+
 							}
-							else if(event==="detail")
-							{
-								
-							}
-							
-})
+
+						})
 
 						// 头部工具栏点击事件
 						treeTable.on('toolbar(demoTreeTb)', function(obj) {
-							switch(obj.event) {
+							switch (obj.event) {
 								case 'add':
 									//layer.msg('添加');
 									console.log(obj)
@@ -199,7 +217,7 @@
 						// 搜索
 						$('#btnSearch').click(function() {
 							var keywords = $('#edtSearch').val();
-							if(keywords) {
+							if (keywords) {
 								insTb.filterData(keywords);
 							} else {
 								insTb.clearFilter();
@@ -232,30 +250,6 @@
 
 					});
 				})
-				function changeC(obj,categoryName){
-					$.ajax({
-						type: "post",
-						url: "http://ser.zuoxinlei.top:38000",
-						data: {
-							"type":"changeCategory",
-							"categoryName": categoryName,
-							"categoryId": obj.data.categoryId
-						},
-						success:function(res) {
-							if(res.status==0)
-							{
-								layer.msg(res.msg)
-							}
-							else
-							{
-								layer.msg(res.msg)
-							}
-						},
-						xhrFields: {
-							withCredentials: true
-						}
-				})
-				}
 			</script>
 	</body>
 
