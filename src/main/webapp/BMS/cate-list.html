@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>品类列表</title>
+  <link rel="stylesheet" href="lib/layui/css/layui.css" media="all">
+  <style>
+	  #app{
+		  position: relative;
+	  }
+	  #app>#appx{
+		  position: absolute;
+		  right: 120px;
+	  }
+	  #app>#appy{
+		  position: absolute;
+	  	  right: 20px;
+	  }
+  </style>
+</head>
+<body>
+	<div class="layui-fluid">
+	    <div class="layui-row layui-col-space15">
+	        <div class="layui-col-md12">
+	            <div class="layui-card">
+	                <div class="layui-card-body ">
+	                    <form class="layui-form layui-col-space5">
+	                         <div class="layui-card-header" id="app">
+								<div class="layui-inline layui-show-xs-block">
+									<input type="text" name="username"  placeholder="请输入商品名" autocomplete="off" class="layui-input">
+								</div>
+								<div class="layui-inline layui-show-xs-block">
+									<button class="layui-btn"  lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
+								</div>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+								<button id="appx" class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除</button>
+								<button id="appy" class="layui-btn" onclick="xadmin.open('添加商品','./member-add.html',600,400)"><i class="layui-icon"></i>添加</button>
+							</div>
+	                    </form>
+	                </div>
+				</div>
+			</div>
+		</div>
+	               
+ <table id="demo" lay-filter="test"></table>
+ <script type="text/html" id="barDemo">
+	<a class="layui-btn layui-btn-xs" lay-event="detail">查看</a>
+   <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+   <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+   
+ </script>
+<script src="lib/layui/layui.all.js"></script>
+<script>
+layui.use('table', function(){
+  var table = layui.table;
+  
+  table.render({
+	  elem: '#demo'
+	  ,url: 'http://ser.zuoxinlei.top:38000/shopping/Category?type=getDeepCategory&category=2' //数据接口
+	  ,page: true //开启分页
+	  
+	  ,parseData: function(res){ //res 即为原始返回的数据
+	      return {
+	        "code": res.status, //解析接口状
+	        "data": res.data ,//解析数据列表
+			"count":res.tatol
+	      };
+	  }
+	  ,response: {
+	    statusCode: 0 //规定成功的状态码，默认：0
+	  } 
+	  
+	  
+	  
+	  ,cols: [[ //表头
+		{field: 'categoryId', title: 'ID', sort: true, fixed: 'left'}
+		,{field: 'categoryName', title: '名称'}
+		,{field: 'categoryStatus', title: '类别状态'}
+		,{field: 'createTime', title: '创建时间'}
+		,{field: 'updateTime',title: '更新时间'}
+		,{fixed: 'right', align:'center', toolbar: '#barDemo'} //这里的toolbar值是模板元素的选择器
+	  ]]
+	});
+	
+	table.on('tool(test)', function(obj){ //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+	  var data = obj.data //获得当前行数据
+	  var layEvent = obj.event //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+	  var tr = obj.tr //获得当前行 tr 的 DOM 对象（如果有的话）
+	 
+	  if(layEvent === 'detail'){ //查看
+	    //do somehing
+	  } else if(layEvent === 'del'){ //删除
+	    layer.confirm('真的删除行么', function(index){
+	      obj.del() //删除对应行（tr）的DOM结构，并更新缓存
+	      layer.close(index)
+	      //向服务端发送删除指令
+	    });
+	  } else if(layEvent === 'edit'){ //编辑
+	    //do something
+	    
+	    //同步更新缓存对应的值
+	    obj.update({
+	      username: '123'
+	      ,title: 'xxx'
+	    });
+	  } else if(layEvent === 'LAYTABLE_TIPS'){
+	    layer.alert('Hi，头部工具栏扩展的右侧图标。')
+	  }
+	});
+});
+</script>
+</body>
+</html>
