@@ -38,6 +38,7 @@ public class CategoryServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		String originHeader=request.getHeader("Origin");
 		/* 允许跨域的主机地址 */
+		System.out.println(originHeader);
 		response.setHeader("Access-Control-Allow-Origin", originHeader);
 		/* 允许跨域的请求方法GET, POST, HEAD 等 */
 		response.setHeader("Access-Control-Allow-Methods", "*");
@@ -67,6 +68,10 @@ public class CategoryServlet extends HttpServlet {
 			else if(type.equals("getDeepCategory"))
 			{
 				get_deep_category(request, response);
+			}
+			else if(type.equals("getAll"))
+			{
+				get_all_category(request, response);
 			}
 		}
 	}
@@ -156,5 +161,20 @@ public class CategoryServlet extends HttpServlet {
 			e.printStackTrace();
 		}
 	}
-	
+	private void get_all_category(HttpServletRequest request, HttpServletResponse response)
+	{
+		ServerResponse<List<Category>> sr=new ServerResponse<>();
+		CategoryServiceImpl category=new CategoryServiceImpl();
+		sr=category.get_all_category_logic();
+		Gson gson = new Gson();
+		String json = gson.toJson(sr);
+		try {
+			PrintWriter pw = response.getWriter();
+			pw.print(json);
+			pw.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }

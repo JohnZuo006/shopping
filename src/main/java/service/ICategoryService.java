@@ -14,4 +14,6 @@ public interface ICategoryService {
 	public ServerResponse<Category> change_category_logic(String categoryId,String categoryName);
 //查找递归子类别
 	public ServerResponse<List<String>> get_deep_category_logic(String categoryId);
+//获取所有分类
+	public ServerResponse<List<Category>> get_all_category_logic();
 }

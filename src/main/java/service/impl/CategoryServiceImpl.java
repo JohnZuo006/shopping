@@ -113,4 +113,22 @@ public class CategoryServiceImpl implements ICategoryService {
 		}
 		return re;
 	}
+
+	@Override
+	public ServerResponse<List<Category>> get_all_category_logic() {
+		// TODO Auto-generated method stub
+		ServerResponse<List<Category>> resp=new ServerResponse<List<Category>>();
+		String sql="select * from category";
+		List<Category> list=JdbcUtil.executeQuery(sql, Category.class);
+		if(list.isEmpty())
+		{
+			resp.setStatus(1);
+			resp.setMsg("没有可显示的分类");
+		}
+		else {
+			resp.setData(list);
+			resp.setStatus(0);
+		}
+		return resp;
+	}
 }
