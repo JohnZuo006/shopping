@@ -209,13 +209,6 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public ServerResponse<Page<List<User>>> listuser_logic(String role,String userId,int pageSize,int pageNum) { // 查询列表
 		// TODO Auto-generated method stub
-//		String sql="SELECT * from user where role=?";
-//		 List<User> list=JdbcUtil.executeQuery(sql,User.class,role);
-//		 ServerResponse<List> sr = new ServerResponse<List>();
-//		 sr.setStatus(0);
-//		 sr.setData(list);
-//		 System.out.println(list);
-//		 return sr;
 		ServerResponse<Page<List<User>>> resp = new ServerResponse<Page<List<User>>>();
 		//判断用户是不是admin
 		String sql3="select * from user where userId=?";
@@ -228,8 +221,8 @@ public class UserServiceImpl implements UserService {
 		else
 		{
 			// 获取数据库中数据总数
-			String sql = "select count(*) as count from user";
-			int sum = JdbcUtil.getSum(sql);
+			String sql = "select count(*) as count from user where role=?";
+			int sum = JdbcUtil.getSum(sql,role);
 			//计算分页总数
 			int pages=sum%pageSize==0?sum/pageSize:(sum/pageSize)+1;
 			System.out.println("pages="+pages);
@@ -238,8 +231,8 @@ public class UserServiceImpl implements UserService {
 			int startRow=(pageNum-1)*pageSize;
 			int endRow=startRow+pageSize>sum?sum:startRow+pageSize;
 			//获取当前页的数据
-			String sql2="select * from user limit ?,?";
-			List<User> list=JdbcUtil.executeQuery(sql2, User.class,startRow,pageSize );
+			String sql2="select * from user where role=? limit ?,?";
+			List<User> list=JdbcUtil.executeQuery(sql2, User.class,role,startRow,pageSize );
 			
 			//将数据赋值到page里面
 			Page<List<User>> page=new Page<List<User>>();

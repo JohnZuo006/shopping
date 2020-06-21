@@ -2,6 +2,7 @@ package servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.ResultSet;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -239,7 +240,7 @@ public void login(HttpServletRequest request, HttpServletResponse response) {  /
 		String username=(String) request.getSession().getAttribute("username");
 		UserServiceImpl us = new UserServiceImpl();
 		ServerResponse<User> sr = us.getinformation_logic(username);
-
+		System.out.println("get:"+username);
 		Gson gson = new Gson();
 		String json = gson.toJson(sr);
 
@@ -346,11 +347,13 @@ public void login(HttpServletRequest request, HttpServletResponse response) {  /
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
 		UserServiceImpl us = new UserServiceImpl();
-
+		HttpSession session=request.getSession();
 		ServerResponse<User> sr = us.loginAdmin_logic(username, password);
 		Gson gson = new Gson();
 		String json = gson.toJson(sr);
-
+		session.setAttribute("userid", Integer.toString(sr.getData().getUserId()));
+		session.setAttribute("username", sr.getData().getUserName());
+		System.out.println(session.toString());
 		try {
 			PrintWriter pw = response.getWriter();
 			pw.print(json);
@@ -363,8 +366,10 @@ public void login(HttpServletRequest request, HttpServletResponse response) {  /
 	public void listUser(HttpServletRequest request, HttpServletResponse response) {
 		// 用户列表
 		ServerResponse<Page<List<User>>> sr = new ServerResponse<Page<List<User>>>();
-		String userId=(String) request.getSession().getAttribute("userId");
+		String userId=(String) request.getSession().getAttribute("userid");
 		userId="1";//测试用
+		System.out.println(userId);
+		System.out.println(request.getSession().toString());
 		if(userId==null||userId=="")
 		{
 			sr.setStatus(1);
