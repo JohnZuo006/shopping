@@ -377,7 +377,7 @@ public void login(HttpServletRequest request, HttpServletResponse response) {  /
 		}
 		else
 		{
-			String role ="";// request.getParameter("role");
+			String role ="user";// request.getParameter("role");
 			String pageSize=request.getParameter("limit");
 			String pageNum=request.getParameter("page");
 			if(pageSize==null||pageSize=="")

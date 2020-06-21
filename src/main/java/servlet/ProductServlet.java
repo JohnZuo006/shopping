@@ -85,6 +85,10 @@ public class ProductServlet extends HttpServlet {
 	private void detail(HttpServletRequest request, HttpServletResponse response) {
 
 		String productid = request.getParameter("productid"); // 获取商品ID值
+		if(productid==null||productid=="")
+		{
+			productid=request.getParameter("productId");
+		}
 		ProductServiceImpl us = new ProductServiceImpl();
 		ServerResponse<Product> sr = us.detail_logic(productid);
 
@@ -135,20 +139,20 @@ public class ProductServlet extends HttpServlet {
 
 	public void add(HttpServletRequest request, HttpServletResponse response) { // 增加商品
 
-		String categoryid = request.getParameter("categoryid");
-		String name = request.getParameter("name");
-		String subtitle = request.getParameter("subtitle");
-		String mainimage = request.getParameter("mainimage");
-		String subimages = request.getParameter("subimages");
+		String categoryid = request.getParameter("categoryId");
+		String name = request.getParameter("productName");
+		String subtitle = request.getParameter("productSubtitle");
+		String mainimage = request.getParameter("mainImage");
+		String subimages = request.getParameter("subImages");
 		String detail = request.getParameter("detail");
 		String price = request.getParameter("price");
 		String stock = request.getParameter("stock");
-		String status = request.getParameter("status");
+		String status = request.getParameter("productStatus");
 
 		ProductServiceImpl us = new ProductServiceImpl();
 		ServerResponse<Product> sr = us.add_logic(categoryid, name, subtitle, mainimage, subimages, detail, price,
 				stock, status);
-
+		System.out.println(sr);
 		Gson gson = new Gson();
 		String json = gson.toJson(sr);
 
@@ -164,17 +168,51 @@ public class ProductServlet extends HttpServlet {
 
 	public void update(HttpServletRequest request, HttpServletResponse response) { // 更新产品
 		Product product = new Product();
-		product.setProductId(Integer.parseInt(request.getParameter("productid")));
-		product.setCategoryId(Integer.parseInt(request.getParameter("categoryid")));
-		product.setProductName(request.getParameter("name"));
-		product.setProductSubtitle(request.getParameter("subtitle"));
-		product.setMainImage(request.getParameter("mainimage"));
-		product.setSubImages(request.getParameter("subimages"));
+		String productid=request.getParameter("productid");
+		if(productid==null||productid=="")
+		{
+			productid = request.getParameter("productId");
+		}
+		product.setProductId(Integer.parseInt(productid));
+		String categoryid=request.getParameter("categoryid");
+		if(categoryid==null||categoryid=="") {
+			categoryid=request.getParameter("categoryId");
+		}
+		product.setCategoryId(Integer.parseInt(categoryid));
+		String name=request.getParameter("name");
+		if(name==null||name=="")
+		{
+			name=request.getParameter("productName");
+		}
+		product.setProductName(name);
+		String productSubtitle=request.getParameter("subtitle");
+		if(productSubtitle==null||productSubtitle=="")
+		{
+			productSubtitle=request.getParameter("productSubtitle");
+		}
+		product.setProductSubtitle(productSubtitle);
+		String mainimage=request.getParameter("mainimage");
+		if(mainimage==null||mainimage=="")
+		{
+			mainimage=request.getParameter("mainImage");
+		}
+		product.setMainImage(mainimage);
+		String subimages=request.getParameter("subimages");
+		if(subimages==null||subimages=="")
+		{
+			subimages=request.getParameter("mainImage");
+		}
+		product.setSubImages(subimages);
 		product.setDetail(request.getParameter("detail"));
 		BigDecimal price = new BigDecimal(request.getParameter("price"));
 		price = price.setScale(2, BigDecimal.ROUND_HALF_UP); // 小数2位,四舍五入
 		product.setPrice(price);
 		product.setStock(Integer.parseInt(request.getParameter("stock")));
+		String status=request.getParameter("status");
+		if(status==null||status=="")
+		{
+			status=request.getParameter("productStatus");
+		}
 		product.setProductStatus(request.getParameter("status"));
 
 		ProductServiceImpl us = new ProductServiceImpl();
@@ -195,8 +233,15 @@ public class ProductServlet extends HttpServlet {
 
 	public void status(HttpServletRequest request, HttpServletResponse response) { // 更改产品状态 0在售 ,1下架,2删除
 		String proid = request.getParameter("productid");
+		if(proid==null||proid=="")
+		{
+			proid=request.getParameter("productId");
+		}
 		String status = request.getParameter("status");
-
+		if(status==null||status=="")
+		{
+			status=request.getParameter("productStatus");
+		}
 		ProductServiceImpl us = new ProductServiceImpl();
 		ServerResponse<Product> sr = us.status_logic(proid, status);
 		Gson gson = new Gson();
