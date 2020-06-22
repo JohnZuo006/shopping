@@ -55,6 +55,7 @@ public class AddressServlet extends HttpServlet {
 		response.setHeader("content-type", "text/html;charset=UTF-8");
 		response.setCharacterEncoding("UTF-8");
 		String type = request.getParameter("type");
+		System.out.println("addressservlet+"+type);
 		if (type != null) {
 			if (type.equals("add")) {
 				add(request, response);

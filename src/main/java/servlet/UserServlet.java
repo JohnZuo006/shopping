@@ -55,6 +55,7 @@ public class UserServlet extends HttpServlet {
 		response.setHeader("content-type", "text/html;charset=UTF-8");
 		response.setCharacterEncoding("UTF-8");
 		String type = request.getParameter("type");
+		System.out.println("userservlet+"+type);
 		if(type!=null)
 		{
 			if (type.equals("login"))
@@ -83,7 +84,6 @@ public class UserServlet extends HttpServlet {
 				findQuestion(request, response);
 			else if(type.equals("changeQuestion"))
 				changeQuestion(request, response);
-
 		}
 	}
 

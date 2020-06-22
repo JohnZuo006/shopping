@@ -54,6 +54,7 @@ public class ProductServlet extends HttpServlet {
 		response.setHeader("content-type", "text/html;charset=UTF-8");
 		response.setCharacterEncoding("UTF-8");
 		String type = request.getParameter("type");
+		System.out.println("productservlet+"+type);
 		if (type != null) {
 			if (type.equals("detail")) // 获取产品详细
 				detail(request, response);
