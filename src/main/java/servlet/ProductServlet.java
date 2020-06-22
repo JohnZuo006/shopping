@@ -3,6 +3,7 @@ package servlet;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -54,7 +55,7 @@ public class ProductServlet extends HttpServlet {
 		response.setHeader("content-type", "text/html;charset=UTF-8");
 		response.setCharacterEncoding("UTF-8");
 		String type = request.getParameter("type");
-		System.out.println("productservlet+"+type);
+		System.out.println(new Date()+"productservlet+"+type);
 		if (type != null) {
 			if (type.equals("detail")) // 获取产品详细
 				detail(request, response);

@@ -3,6 +3,7 @@ package servlet;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.ResultSet;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -55,7 +56,7 @@ public class UserServlet extends HttpServlet {
 		response.setHeader("content-type", "text/html;charset=UTF-8");
 		response.setCharacterEncoding("UTF-8");
 		String type = request.getParameter("type");
-		System.out.println("userservlet+"+type);
+		System.out.println(new Date()+"userservlet+"+type);
 		if(type!=null)
 		{
 			if (type.equals("login"))

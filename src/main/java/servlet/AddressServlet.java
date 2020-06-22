@@ -2,6 +2,7 @@ package servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -55,7 +56,7 @@ public class AddressServlet extends HttpServlet {
 		response.setHeader("content-type", "text/html;charset=UTF-8");
 		response.setCharacterEncoding("UTF-8");
 		String type = request.getParameter("type");
-		System.out.println("addressservlet+"+type);
+		System.out.println(new Date()+"addressservlet+"+type);
 		if (type != null) {
 			if (type.equals("add")) {
 				add(request, response);
