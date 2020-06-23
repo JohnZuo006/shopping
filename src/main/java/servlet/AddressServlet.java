@@ -15,9 +15,7 @@ import com.google.gson.Gson;
 
 import common.Address;
 import common.ServerResponse;
-import common.User;
 import service.impl.AddressServiceImpl;
-import service.impl.UserServiceImpl;
 import vo.Page;
 
 /**

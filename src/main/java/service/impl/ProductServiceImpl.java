@@ -4,7 +4,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import common.Address;
 import common.Product;
 import common.ServerResponse;
 import jdbcUtil.JdbcUtil;
@@ -218,5 +217,23 @@ public class ProductServiceImpl implements ProductService {
 
     	return sr;
     }
+	@Override
+	public ServerResponse<Product> delete_product_logic(String productId) {
+		// TODO Auto-generated method stub
+		ServerResponse<Product> resp=new ServerResponse<Product>();
+		String sql="delete from product where productId=?";
+		int i=JdbcUtil.executeUpdate(sql, productId);
+		if(i==1)
+		{
+			resp.setStatus(0);
+			resp.setMsg("删除成功");
+		}
+		else
+		{
+			resp.setStatus(2);
+			resp.setMsg("删除失败");
+		}
+		return resp;
+	}
  
 }
