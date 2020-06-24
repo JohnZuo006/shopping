@@ -61,7 +61,8 @@ public class UploadServlet extends HttpServlet {
 		response.setHeader("Access-Control-Allow-Headers", "*");
 		/* 是否携带cookie */
 		response.setHeader("Access-Control-Allow-Credentials", "true");
-		
+		response.setHeader("content-type", "text/html;charset=UTF-8");
+		response.setCharacterEncoding("UTF-8");
 		String path="D:/www/";
 		String fn=null;
         
@@ -89,7 +90,7 @@ public class UploadServlet extends HttpServlet {
                 }                
             }    
             ServerResponse<String> sr = new ServerResponse<>();
-            String url="http://localhost:8080/Uploadpic/"+fn;
+            String url="http://ser.zuoxinlei.top:38000/Uploadpic/"+fn;
             sr.setStatus(0);
             sr.setData(url);
     		Gson gson = new Gson();
