@@ -2,6 +2,7 @@ package servlet;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 import java.util.UUID;
 
@@ -14,6 +15,10 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+
+import com.google.gson.Gson;
+
+import common.ServerResponse;
 
 /**
  * Servlet implementation class UploadServlet
@@ -43,6 +48,20 @@ public class UploadServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		System.out.println("---------------------------------111");
+		String originHeader=request.getHeader("Origin");
+		System.out.println(originHeader);
+		/* 允许跨域的主机地址 */
+		response.setHeader("access-control-allow-origin", "http://127.0.0.1:8848");
+		/* 允许跨域的请求方法GET, POST, HEAD 等 */
+		response.setHeader("Access-Control-Allow-Methods", "*");
+		/* 重新预检验跨域的缓存时间 (s) */
+		response.setHeader("Access-Control-Max-Age", "3600");
+		/* 允许跨域的请求头 */
+		response.setHeader("Access-Control-Allow-Headers", "*");
+		/* 是否携带cookie */
+		response.setHeader("Access-Control-Allow-Credentials", "true");
+		
 		String path="D:/www/";
 		String fn=null;
         
@@ -69,7 +88,21 @@ public class UploadServlet extends HttpServlet {
                     
                 }                
             }    
-            
+            ServerResponse<String> sr = new ServerResponse<>();
+            String url="http://localhost:8080/Uploadpic/"+fn;
+            sr.setStatus(0);
+            sr.setData(url);
+    		Gson gson = new Gson();
+    		String json = gson.toJson(sr);
+
+    		try {
+    			PrintWriter pw = response.getWriter();
+    			pw.print(json);
+    			pw.close();
+    		} catch (IOException e) {
+    			// TODO Auto-generated catch block
+    			e.printStackTrace();
+    		}
         } catch (Exception e) {
             e.printStackTrace();
         }	}

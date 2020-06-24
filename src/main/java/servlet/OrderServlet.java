@@ -17,6 +17,7 @@ import com.google.gson.Gson;
 import common.Order;
 import common.ServerResponse;
 import service.impl.OrderServiceImpl;
+import vo.Page;
 
 /**
  * Servlet implementation class OrderServlet
@@ -62,6 +63,26 @@ public class OrderServlet extends HttpServlet {
 		{
 			list_order(request, response);
 		}
+		else if(type.equals("adminList"))
+		{
+			admin_list_order(request, response);
+		}
+		else if(type.equals("detail"))
+		{
+			detail_order(request, response);
+		}
+		else if(type.equals("adminDetail"))
+		{
+			admin_detail_order(request, response);
+		}
+		else if(type.equals("cancel"))
+		{
+			cancel_order(request, response);
+		}
+		else if(type.equals("send"))
+		{
+			admin_send_order(request, response);
+		}
 	}
 
 	/**
@@ -75,7 +96,7 @@ public class OrderServlet extends HttpServlet {
 	{
 		ServerResponse<Order> sr= new ServerResponse<Order>();
 		String userId=(String) request.getSession().getAttribute("userId");
-		userId="1";
+		userId="2";
 		if(userId==null||userId=="")
 		{
 			sr.setStatus(2);
@@ -102,9 +123,9 @@ public class OrderServlet extends HttpServlet {
 	}
 	private void list_order(HttpServletRequest request, HttpServletResponse response)
 	{
-		ServerResponse<Order> sr= new ServerResponse<Order>();
+		ServerResponse<Page<List<Order>>> sr= new ServerResponse<>();
 		String userId=(String) request.getSession().getAttribute("userId");
-		userId="1";
+		userId="1";//测试用
 		if(userId==null||userId=="")
 		{
 			sr.setStatus(2);
@@ -112,7 +133,18 @@ public class OrderServlet extends HttpServlet {
 		}
 		else
 		{
-			
+			String pageSize=request.getParameter("limit");
+			String pageNum=request.getParameter("page");
+			if(pageSize==null||pageSize=="")
+			{
+				pageSize="10";
+			}
+			if(pageNum==null||pageNum=="")
+			{
+				pageNum="1";
+			}
+			OrderServiceImpl os=new OrderServiceImpl();
+			sr=os.list_order_logic(userId,Integer.parseInt(pageSize),Integer.parseInt(pageNum));
 		}
 		Gson gson = new Gson();
 		String json = gson.toJson(sr);
@@ -125,5 +157,154 @@ public class OrderServlet extends HttpServlet {
 			e.printStackTrace();
 		}
 	}
+	private void admin_list_order(HttpServletRequest request, HttpServletResponse response)
+	{
+		ServerResponse<Page<List<Order>>> sr= new ServerResponse<>();
+		String userId=(String) request.getSession().getAttribute("userId");
+		userId="1";//测试用
+		if(userId==null||userId=="")
+		{
+			sr.setStatus(2);
+			sr.setMsg("用户未登录");
+		}
+		else
+		{
+			String pageSize=request.getParameter("limit");
+			String pageNum=request.getParameter("page");
+			if(pageSize==null||pageSize=="")
+			{
+				pageSize="10";
+			}
+			if(pageNum==null||pageNum=="")
+			{
+				pageNum="1";
+			}
+			OrderServiceImpl os=new OrderServiceImpl();
+			sr=os.admin_list_order_logic(Integer.parseInt(pageSize),Integer.parseInt(pageNum));
+		}
+		Gson gson = new Gson();
+		String json = gson.toJson(sr);
+		try {
+			PrintWriter pw = response.getWriter();
+			pw.print(json);
+			pw.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	private void detail_order(HttpServletRequest request, HttpServletResponse response)
+	{
+		ServerResponse<Order> sr= new ServerResponse<Order>();
+		String userId=(String) request.getSession().getAttribute("userId");
+		userId="1";
+		if(userId==null||userId=="")
+		{
+			sr.setStatus(2);
+			sr.setMsg("用户未登录");
+		}
+		else
+		{
+			//List<String> productIds=Arrays.asList(request.getParameter("productIds").split(","));
+			//List<String> quantities=Arrays.asList(request.getParameter("quantities").split(","));
+			String orderNo=request.getParameter("orderNo");
+			//String addressId=request.getParameter("addressId");
+			OrderServiceImpl os=new OrderServiceImpl();
+			sr=os.detail_order_logic(userId, orderNo);
+		}
+		Gson gson = new Gson();
+		String json = gson.toJson(sr);
+		try {
+			PrintWriter pw = response.getWriter();
+			pw.print(json);
+			pw.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
+	}
+	private void admin_detail_order(HttpServletRequest request, HttpServletResponse response)
+	{
+		ServerResponse<Order> sr= new ServerResponse<Order>();
+//		String userId=(String) request.getSession().getAttribute("userId");
+//		userId="1";
+//		if(userId==null||userId=="")
+//		{
+//			sr.setStatus(2);
+//			sr.setMsg("用户未登录");
+//		}
+//		else
+//		{
+			//List<String> productIds=Arrays.asList(request.getParameter("productIds").split(","));
+			//List<String> quantities=Arrays.asList(request.getParameter("quantities").split(","));
+			String orderNo=request.getParameter("orderNo");
+			//String addressId=request.getParameter("addressId");
+			OrderServiceImpl os=new OrderServiceImpl();
+			sr=os.admin_detail_order_logic( orderNo);
+//		}
+		Gson gson = new Gson();
+		String json = gson.toJson(sr);
+		try {
+			PrintWriter pw = response.getWriter();
+			pw.print(json);
+			pw.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+	private void cancel_order(HttpServletRequest request, HttpServletResponse response)
+	{
+		ServerResponse<Order> sr= new ServerResponse<Order>();
+		String userId=(String) request.getSession().getAttribute("userId");
+		userId="1";
+		if(userId==null||userId=="")
+		{
+			sr.setStatus(3);
+			sr.setMsg("用户未登录");
+		}
+		else
+		{
+			//List<String> productIds=Arrays.asList(request.getParameter("productIds").split(","));
+			//List<String> quantities=Arrays.asList(request.getParameter("quantities").split(","));
+			String orderNo=request.getParameter("orderNo");
+			//String addressId=request.getParameter("addressId");
+			OrderServiceImpl os=new OrderServiceImpl();
+			sr=os.cancel_order_logic(userId, orderNo);
+		}
+		Gson gson = new Gson();
+		String json = gson.toJson(sr);
+		try {
+			PrintWriter pw = response.getWriter();
+			pw.print(json);
+			pw.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+	private void admin_send_order(HttpServletRequest request, HttpServletResponse response)
+	{
+		ServerResponse<Order> sr= new ServerResponse<Order>();
+			//List<String> productIds=Arrays.asList(request.getParameter("productIds").split(","));
+			//List<String> quantities=Arrays.asList(request.getParameter("quantities").split(","));
+			String orderNo=request.getParameter("orderNo");
+			//String addressId=request.getParameter("addressId");
+			OrderServiceImpl os=new OrderServiceImpl();
+			sr=os.admin_send_order_logic(orderNo);
+		Gson gson = new Gson();
+		String json = gson.toJson(sr);
+		try {
+			PrintWriter pw = response.getWriter();
+			pw.print(json);
+			pw.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
 }

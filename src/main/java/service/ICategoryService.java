@@ -16,4 +16,6 @@ public interface ICategoryService {
 	public ServerResponse<List<String>> get_deep_category_logic(String categoryId);
 //获取所有分类
 	public ServerResponse<List<Category>> get_all_category_logic();
+//删除分类
+	public ServerResponse<Category> delete_category_logic(String categoryId);
 }

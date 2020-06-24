@@ -75,6 +75,10 @@ public class CategoryServlet extends HttpServlet {
 			{
 				get_all_category(request, response);
 			}
+			else if(type.equals("delete"))
+			{
+				delete_category(request, response);
+			}
 		}
 	}
 
@@ -168,6 +172,23 @@ public class CategoryServlet extends HttpServlet {
 		ServerResponse<List<Category>> sr=new ServerResponse<>();
 		CategoryServiceImpl category=new CategoryServiceImpl();
 		sr=category.get_all_category_logic();
+		Gson gson = new Gson();
+		String json = gson.toJson(sr);
+		try {
+			PrintWriter pw = response.getWriter();
+			pw.print(json);
+			pw.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	private void delete_category(HttpServletRequest request, HttpServletResponse response)
+	{
+		ServerResponse<Category> sr=new ServerResponse<>();
+		String categoryId=request.getParameter("categoryId");
+		CategoryServiceImpl category=new CategoryServiceImpl();
+		sr=category.delete_category_logic(categoryId);
 		Gson gson = new Gson();
 		String json = gson.toJson(sr);
 		try {

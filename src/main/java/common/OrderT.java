@@ -16,7 +16,7 @@ public class OrderT {
 	private Timestamp sendTime;
 	private Timestamp endTime;
 	private Timestamp closeTime;
-	private Timestamp creatTime;
+	private Timestamp createTime;
 	private Timestamp updateTime;
 	public OrderT() {
 		super();
@@ -38,7 +38,7 @@ public class OrderT {
 		this.sendTime = sendTime;
 		this.endTime = endTime;
 		this.closeTime = closeTime;
-		this.creatTime = creatTime;
+		this.createTime = creatTime;
 		this.updateTime = updateTime;
 	}
 	public int getOrderId() {
@@ -114,10 +114,10 @@ public class OrderT {
 		this.closeTime = closeTime;
 	}
 	public Timestamp getCreatTime() {
-		return creatTime;
+		return createTime;
 	}
 	public void setCreatTime(Timestamp creatTime) {
-		this.creatTime = creatTime;
+		this.createTime = creatTime;
 	}
 	public Timestamp getUpdateTime() {
 		return updateTime;
@@ -130,7 +130,7 @@ public class OrderT {
 		return "OrderT [orderId=" + orderId + ", orderNo=" + orderNo + ", userId=" + userId + ", addressId=" + addressId
 				+ ", payment=" + payment + ", paymentType=" + paymentType + ", postage=" + postage + ", orderStatus="
 				+ orderStatus + ", paymentTime=" + paymentTime + ", sendTime=" + sendTime + ", endTime=" + endTime
-				+ ", closeTime=" + closeTime + ", creatTime=" + creatTime + ", updateTime=" + updateTime + "]";
+				+ ", closeTime=" + closeTime + ", creatTime=" + createTime + ", updateTime=" + updateTime + "]";
 	}
 	
 }

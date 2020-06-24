@@ -131,4 +131,56 @@ public class CategoryServiceImpl implements ICategoryService {
 		}
 		return resp;
 	}
+
+	@Override
+	public ServerResponse<Category> delete_category_logic(String categoryId) {
+		ServerResponse<Category> resp=new ServerResponse<Category>();
+		String sql="select * from category where categoryId=?";
+		List<Category> list=JdbcUtil.executeQuery(sql, Category.class, categoryId);
+		if(list.isEmpty())
+		{
+			resp.setStatus(1);
+			resp.setMsg("品类不存在，删除失败");
+		}
+		else
+		{
+			List<String> lists=new ArrayList<String>();
+			lists.add(categoryId);
+			lists.addAll(getSonId(Integer.parseInt(categoryId)));
+			String sql2="delete from category where categoryId=?";
+			String sql3="delete from product where categoryId=?";
+			boolean flag=true;
+			for(String l:lists)
+			{
+				int c=JdbcUtil.executeUpdate(sql2, l);
+				if(c>0)
+				{
+					int p=JdbcUtil.executeUpdate(sql3, l);
+					if(p<1)
+					{
+						flag=false;
+					}
+				}
+				else
+				{
+					flag=false;
+				}
+			}
+			if(flag)
+			{
+				resp.setStatus(0);
+				resp.setMsg("品类及商品删除成功");
+			}
+			else
+			{
+				resp.setStatus(2);
+				resp.setMsg("部分删除失败");
+			}
+		}
+		return resp;
+	}
+	public static void main(String[] args) {
+		CategoryServiceImpl cs=new CategoryServiceImpl();
+		System.out.println(cs.delete_category_logic("3"));
+	}
 }
