@@ -10,6 +10,7 @@ public class Pay {
 	private String platformNumber;
 	private String platformStatus;
 	private Timestamp updateTime;
+	private Timestamp createTime;
 	public Pay() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -66,6 +67,13 @@ public class Pay {
 	}
 	public void setUpdateTime(Timestamp updateTime) {
 		this.updateTime = updateTime;
+	}
+	
+	public Timestamp getCreateTime() {
+		return createTime;
+	}
+	public void setCreateTime(Timestamp createTime) {
+		this.createTime = createTime;
 	}
 	@Override
 	public String toString() {
