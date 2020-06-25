@@ -11,8 +11,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
 
-import common.Pay;
 import common.ServerResponse;
+import service.impl.PayServiceImpl;
+import vo.Main;
 
 /**
  * Servlet implementation class PayServlet
@@ -57,6 +58,14 @@ public class PayServlet extends HttpServlet {
 			{
 				pay_pay(request, response);
 			}
+			else if(type.equals("callback"))
+			{
+				call_back(request, response);
+			}
+			else if(type.equals("status"))
+			{
+				pay_status(request, response);
+			}
 		}
 	}
 
@@ -69,9 +78,40 @@ public class PayServlet extends HttpServlet {
 	}
 	private void pay_pay(HttpServletRequest request, HttpServletResponse response)
 	{
-		ServerResponse<Pay> sr=new ServerResponse<>();
+		ServerResponse<String> sr=new ServerResponse<>();
+		String orderNo=request.getParameter("orderNo");
+		PayServiceImpl ps=new PayServiceImpl();
+		//Main ps=new Main();
+		sr=ps.pay_logic(orderNo);
+		Gson gson = new Gson();
+		String json = gson.toJson(sr);
+		try {
+			PrintWriter pw = response.getWriter();
+			pw.print(json);
+			pw.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	private void call_back(HttpServletRequest request, HttpServletResponse response)
+	{
+		String tradeNo=request.getParameter("trade_no");
+		String trade_status=request.getParameter("trade_status");
+		String out_trade_no=request.getParameter("out_trade_no");
+		if(trade_status.equals("TRADE_SUCCESS"))
+		{
+			PayServiceImpl ps=new PayServiceImpl();
+			ps.call_back(out_trade_no, tradeNo);
+		}
+	}
+	private void pay_status(HttpServletRequest request, HttpServletResponse response)
+	{
+		ServerResponse<Boolean> sr=new ServerResponse<Boolean>();
 		String orderNo=request.getParameter("orderNo");
 		
+		PayServiceImpl ps=new PayServiceImpl();
+		sr=ps.pay_status_logic(orderNo);
 		Gson gson = new Gson();
 		String json = gson.toJson(sr);
 		try {
