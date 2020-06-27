@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>结算-小米商城</title>
+		<link rel="stylesheet" type="text/css" href="./css/style.css">
+		<link rel="stylesheet" href="layui/css/layui.css" media="all">
+		<script src="js/jquery-3.5.1.min.js"></script>
+		<script src="layui/layui.js"></script>
+		<link rel="stylesheet" type="text/css" href="./css/jquery-confirm.css">
+		<style type="text/css">
+			#back {
+				position: absolute;
+				margin-left: 10px;
+				margin-top: 20px;
+			}
+
+			#text1 {
+				position: absolute;
+				margin-left: 160px;
+			}
+
+			#futu {
+				width: 40px;
+				height: 40px;
+			}
+
+			.delecss {
+				font-size: 30px;
+			}
+
+			#address {
+				font-size: 18px;
+			}
+		</style>
+		<script src="js/jquery-3.5.1.min.js"></script>
+		<script src="js/jquery-confirm.js"></script>
+		<script>
+			$(function(){
+			$.ajax({
+				type:"get",
+				url:"http://localhost:8080/shopping/User",
+				data:{
+					"type":"getInformation"
+				},
+				dataType:"json",
+				success:function(res){
+					if(res['status']==0)
+					{
+						$("#user1").html("欢迎您! "+res.data.userName)
+						$("#user2").html("<a href=self_info.html>个人中心</a>")
+						$("#out").html("退出登录")
+					}
+				},
+				error:function(){
+				},
+				xhrFields: {
+					withCredentials: true
+				}
+			})
+			$("#out").click(function(){
+				$.ajax({
+					type:"get",
+					url:"http://localhost:8080/shopping/User",
+					data:{
+						"type":"loginOut"
+					},
+					dataType:"json",
+					success:function(res){
+						console.log(res)
+						if(res['status']==0)
+						{
+							console.log("0")
+							window.location.href="login.html"
+						}
+					},
+					error:function(res){
+						
+					},
+					xhrFields: {
+						withCredentials: true
+					}
+				})	
+			})
+			let products=""
+			let quantities=""
+			$.ajax({
+				type:"get",
+				url:"http://localhost:8080/shopping/Trolley",
+				data:{
+					"type":"listTrolley"
+				},
+				dataType:"json",
+				success:function(res){
+					console.log(res)
+					if(res['status']==0)
+					{
+						let total = 0
+						let num = 0
+						for(let i=0;i<res.data.length;i++){	
+						  $.ajax({
+							type:"get",
+							url:"http://localhost:8080/shopping/Product",
+							data:{
+								"type":"detail",
+								"productid":res.data[i].productId
+							},
+							dataType:"json",
+							async: false,  
+							success:function(re){
+								if(re['status']==0)
+								{
+									if(res.data[i].checked==1){
+										products+=re.data.productId+','
+										quantities+=res.data[i].quantity+','
+						                const div =$('<div class="content2 center" id="d'+re.data.productId+'">'
+									                 +'<div class="sub_content fl "></div>'
+									                 +'<div class="sub_content fl"><img id="futu" src="'+ re.data.subImages +'"></div>'
+									                 +'<div class="sub_content fl ft20">'+re.data.productName+'&nbsp;'+re.data.productSubtitle+'</div>'
+									                 +'<div class="sub_content fl ">'+re.data.price+'</div>'
+									                 +'<div class="sub_content fl">'+res.data[i].quantity+'</div>'
+									                 +'<div class="sub_content fl" id="pri'+re.data.productId+'">'+(re.data.price*res.data[i].quantity).toFixed(2)+'</div>'
+									                 
+								                     +'</div>')
+								         $("#trolleys").append(div)
+										 total+=re.data.price*res.data[i].quantity
+										 num++
+										 $("#totalprice").html(total.toFixed(2))
+								         }
+								}
+							},
+							error:function(){
+							},
+							xhrFields: {
+								withCredentials: true
+							}
+						 })
+						}//for循环结束
+						$("#all").html(num)
+						}
+						}
+						})//end
+			$.ajax({
+				type:"get",
+				url:"http://localhost:8080/shopping/Address",
+				data:{
+					"type":"list",
+					"limit":100,
+					"page":1
+				},
+				dataType:"json",
+				success:function(res){
+					console.log(res)
+					if(res['status']==0)
+					{
+						let list=res.data.list
+						for(let i=0;i<list.length;i++)
+						{
+							let option=$('<option value='+list[i].addressId+'>收货人:'+
+							list[i].receiverName+'，电话:'+list[i].receiverMobile+'，地址:'+
+							list[i].receiverProvince+list[i].receiverCity+
+							list[i].receiverDistrict+list[i].receiverAddress+'</option>')
+							$("#assressSelect").append(option)
+						}
+					}
+				},
+				error:function(res){
+					
+				},
+				xhrFields: {
+					withCredentials: true
+				}
+			})
+			$(".jsan").click(function(){
+				let ops=$("#assressSelect").val()
+				console.log(products)
+				console.log(quantities)
+				$.ajax({
+					type:"post",
+					url:"http://localhost:8080/shopping/Order",
+					data:{
+						"type":"add",
+						"addressId":ops,
+						"productIds":products,
+						"quantities":quantities
+					},
+					dataType:"json",
+					success:function(res){
+						console.log(res)
+						if(res['status']==0)
+						{
+							$.ajax({
+								type:"post",
+								url:"http://localhost:8080/shopping/Pay",
+								data:{
+									"type":"pay",
+									"orderNo":res.data.orderNo
+								},
+								dataType:"json",
+								success:function(re){
+									console.log(re)
+									if(res['status']==0)
+									{
+										$.confirm({
+											title: '支付',
+											        content: '请使用支付宝扫描二维码支付<img src="'+re.data+'"></img>',
+											        type: 'green',
+											        icon: 'glyphicon glyphicon-question-sign',
+											        buttons: {
+											            ok: {
+											                text: '支付完成',
+											                btnClass: 'btn-primary',
+											                action: function() {
+											                    location.href = 'paysuccess.html?orderNo='+res.data.orderNo //指向下载资源（此处为目标文件的输出数据流）
+											                }
+											            },
+											            cancel: {
+											                text: '取消支付',
+											                btnClass: 'btn-primary',
+															action:function(){
+																location.href='self_info.html'
+															}
+											            }
+											        }
+										})
+									}
+								},
+								error:function(){
+									
+								},
+								xhrFields: {
+									withCredentials: true
+								}
+							})
+						}
+					},
+					error:function(){
+						
+					},
+					xhrFields: {
+						withCredentials: true
+					}
+				})
+			})
+			})
+		</script>
+
+	</head>
+	<body>
+		<!-- start header -->
+		<!--end header -->
+
+		<!-- start banner_x -->
+		<div class="banner_x center">
+			<a href="./index.html" target="_blank" id="back"><img src="./image/mistore_logo.png" alt=""></a>
+			<div id="text1">
+				<div class="wdgwc fl ml40">结算界面</div>
+				<div class="wxts fl ml20">温馨提示：产品是否购买成功，以最终下单为准哦，请尽快结算</div>
+			</div>
+			<div class="dlzc fr">
+				<ul>
+					<li id="user1"><a href="login.html">登录</a></li>
+					<li>&nbsp;&nbsp;|</li>
+					<li id="user2"><a href="self_info.html">注册</a></li>
+					<li>&nbsp;&nbsp;|</li>
+					<li><a href="index.html">主页</a></li>
+					<li>&nbsp;&nbsp;|</li>
+					<li><a href="#" id="out"></a></li>
+				</ul>
+			</div>
+
+			<div class="clear"></div>
+		</div>
+		<div class="xiantiao"></div>
+		<div class="gwcxqbj">
+			<div class="gwcxd center">
+				<div class="top2 center">
+					<div class="sub_top fl"> </div>
+					<div class="sub_top fl">商品名称</div>
+					<div class="sub_top fl">单价</div>
+					<div class="sub_top fl">数量</div>
+					<div class="sub_top fl">小计</div>
+				</div>
+				<div id="trolleys">
+				</div>
+			</div>
+			<div id="address" class="gwcxd center">
+				<br>
+				<p>请选择收货地址</p>
+				<select id="assressSelect"></select>
+			</div>
+			<div class="jiesuandan mt20 center">
+				<div class="tishi fl ml20">
+					<ul>
+						<li style="font-size:20px;">共<span id="all">0</span>件商品</li>
+						<div class="clear"></div>
+					</ul>
+				</div>
+
+				<div class="jiesuan fr">
+					<div class="jiesuanjiage fl">合计：<span id="totalprice">0.00</span></div>
+					<div class="jsanniu fr"><input class="jsan" type="submit" name="jiesuan" value="去支付" /></div>
+					<div class="clear"></div>
+				</div>
+			</div>
+
+		</div>
+
+
+	</body>
+</html>

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>支付结果-小米商城</title>
+		<link rel="stylesheet" type="text/css" href="./css/style.css">
+		<link rel="stylesheet" href="layui/css/layui.css" media="all">
+		<script src="js/jquery-3.5.1.min.js"></script>
+		<script src="layui/layui.js"></script>
+		<style type="text/css">
+			#back {
+				position: absolute;
+				margin-left: 10px;
+				margin-top: 20px;
+			}
+
+			#text1 {
+				position: absolute;
+				margin-left: 160px;
+			}
+
+			#futu {
+				width: 40px;
+				height: 40px;
+			}
+
+			.delecss {
+				font-size: 30px;
+			}
+
+			#address {
+				font-size: 18px;
+			}
+			#centers{
+				text-align: center;
+			}
+			#Success{
+			}
+		</style>
+		<script src="js/jquery-3.5.1.min.js"></script>
+		<script>
+			$(function(){
+			$.ajax({
+				type:"get",
+				url:"http://localhost:8080/shopping/User",
+				data:{
+					"type":"getInformation"
+				},
+				dataType:"json",
+				success:function(res){
+					if(res['status']==0)
+					{
+						$("#user1").html("欢迎您! "+res.data.userName)
+						$("#user2").html("<a href=self_info.html>个人中心</a>")
+						$("#out").html("退出登录")
+					}
+				},
+				error:function(){
+				},
+				xhrFields: {
+					withCredentials: true
+				}
+			})
+			$("#out").click(function(){
+				$.ajax({
+					type:"get",
+					url:"http://localhost:8080/shopping/User",
+					data:{
+						"type":"loginOut"
+					},
+					dataType:"json",
+					success:function(res){
+						console.log(res)
+						if(res['status']==0)
+						{
+							console.log("0")
+							window.location.href="login.html"
+						}
+					},
+					error:function(res){
+						
+					},
+					xhrFields: {
+						withCredentials: true
+					}
+				})	
+			})
+			$("#Successimg").hide()
+			$("#Successdiv").hide()
+			let orderNo=GetQueryString("orderNo");//调用
+			mytime=setInterval(function(){getPayStatus(orderNo)}, 3000)
+			})
+			function getPayStatus(orderNo)
+			{
+				$.ajax({
+					type:"post",
+					url:"http://localhost:8080/shopping/Pay",
+					data:{
+						"type":"status",
+						"orderNo":orderNo
+					},
+					dataType:"json",
+					success:function(res){
+						console.log(res)
+						if(res['status']==0)
+						{
+							clearInterval(mytime)
+							$("#Successimg").show()
+							$("#Successdiv").show()
+							$("#Waitimg").hide()						
+							$("#Waitdiv").hide()
+						}
+					},
+					error:function(res){
+						
+					},
+					xhrFields: {
+						withCredentials: true
+					}
+				})
+			}
+			//获取参数
+			function GetQueryString(name) {
+			    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+			    var r = window.location.search.substr(1).match(reg);
+			    if(r != null) return decodeURI(r[2]);
+			    return null;
+			}
+		</script>
+
+	</head>
+	<body>
+		<!-- start header -->
+		<!--end header -->
+
+		<!-- start banner_x -->
+		<div class="banner_x center">
+			<a href="./index.html" target="_blank" id="back"><img src="./image/mistore_logo.png" alt=""></a>
+			<div id="text1">
+				<div class="wdgwc fl ml40">查询支付界面</div>
+				<div class="wxts fl ml20">温馨提示：产品是否购买成功，以最终下单为准哦，请尽快结算</div>
+			</div>
+			<div class="dlzc fr">
+				<ul>
+					<li id="user1"><a href="login.html">登录</a></li>
+					<li>&nbsp;&nbsp;|</li>
+					<li id="user2"><a href="self_info.html">注册</a></li>
+					<li>&nbsp;&nbsp;|</li>
+					<li><a href="index.html">主页</a></li>
+					<li>&nbsp;&nbsp;|</li>
+					<li><a href="#" id="out"></a></li>
+				</ul>
+			</div>
+
+			<div class="clear"></div>
+		</div>
+		<div class="xiantiao"></div>
+		<div class="gwcxqbj">
+			<div id="centers" class="gwcxd center">
+				<img id="Successimg" width="60" height="60" src="image/成功.png">
+				<div id="Successdiv">支付成功。</div>
+				<img id="Waitimg" width="60" height="60" src="image/等待.png">
+				<div id="Waitdiv">查询支付结果中。。。</div>
+			</div>
+		</div>
+
+
+	</body>
+</html>
