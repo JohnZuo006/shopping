@@ -90,7 +90,7 @@ public class AddressServlet extends HttpServlet {
 		String receiverDistrict = request.getParameter("receiverDistrict");
 		String receiverAddress = request.getParameter("receiverAddress");
 		String receiverZip = request.getParameter("receiverZip");
-		String userId = (String) request.getSession().getAttribute("UserId");
+		String userId = (String) request.getSession().getAttribute("userid");
 		//userId = "1";// 测试用
 		if (userId == null || userId == "") {
 			sr.setStatus(1);
@@ -153,9 +153,9 @@ public class AddressServlet extends HttpServlet {
 		String receiverDistrict = request.getParameter("receiverDistrict");
 		String receiverAddress = request.getParameter("receiverAddress");
 		String receiverZip = request.getParameter("receiverZip");
-		String userId = (String) request.getSession().getAttribute("UserId");
+		String userId = (String) request.getSession().getAttribute("userid");
 		String addressId=request.getParameter("addressId");
-		userId = "1";// 测试用
+		//userId = "1";// 测试用
 		if (userId == null || userId == "") {
 			sr.setStatus(0);
 			sr.setMsg("用户未登录");
@@ -191,8 +191,8 @@ public class AddressServlet extends HttpServlet {
 	private void select(HttpServletRequest request, HttpServletResponse response) {
 		ServerResponse<Address> sr = new ServerResponse<>();
 		String addressId = request.getParameter("addressId");
-		String userId=(String) request.getSession().getAttribute("userId");
-		userId="1";
+		String userId=(String) request.getSession().getAttribute("userid");
+		//userId="1";
 		if(userId==null||userId=="")
 		{
 			sr.setStatus(2);
@@ -218,8 +218,8 @@ public class AddressServlet extends HttpServlet {
 
 	private void list(HttpServletRequest request, HttpServletResponse response) {
 		ServerResponse<Page<List<Address>>> sr = new ServerResponse<Page<List<Address>>>();
-		String userId=(String) request.getSession().getAttribute("userId");
-		userId="1";//测试用
+		String userId=request.getSession().getAttribute("userid").toString();
+		//userId="1";//测试用
 		if(userId==null||userId=="")
 		{
 			sr.setStatus(1);

@@ -37,7 +37,7 @@ public class PayServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		//response.getWriter().append("Served at: ").append(request.getContextPath());
 		String originHeader=request.getHeader("Origin");
-		System.out.println(originHeader);
+		//System.out.println(originHeader);
 		/* 允许跨域的主机地址 */
 		response.setHeader("access-control-allow-origin", originHeader);
 		/* 允许跨域的请求方法GET, POST, HEAD 等 */

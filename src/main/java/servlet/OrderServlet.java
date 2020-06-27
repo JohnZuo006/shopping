@@ -95,8 +95,8 @@ public class OrderServlet extends HttpServlet {
 	private void add_order(HttpServletRequest request, HttpServletResponse response)
 	{
 		ServerResponse<Order> sr= new ServerResponse<Order>();
-		String userId=(String) request.getSession().getAttribute("userId");
-		userId="2";
+		String userId=request.getSession().getAttribute("userid").toString();
+		//userId="2";
 		if(userId==null||userId=="")
 		{
 			sr.setStatus(2);
@@ -124,8 +124,8 @@ public class OrderServlet extends HttpServlet {
 	private void list_order(HttpServletRequest request, HttpServletResponse response)
 	{
 		ServerResponse<Page<List<Order>>> sr= new ServerResponse<>();
-		String userId=(String) request.getSession().getAttribute("userId");
-		userId="1";//测试用
+		String userId=(String) request.getSession().getAttribute("userid");
+		//userId="1";//测试用
 		if(userId==null||userId=="")
 		{
 			sr.setStatus(2);
@@ -160,8 +160,8 @@ public class OrderServlet extends HttpServlet {
 	private void admin_list_order(HttpServletRequest request, HttpServletResponse response)
 	{
 		ServerResponse<Page<List<Order>>> sr= new ServerResponse<>();
-		String userId=(String) request.getSession().getAttribute("userId");
-		userId="1";//测试用
+		String userId=(String) request.getSession().getAttribute("userid");
+		//userId="1";//测试用
 		if(userId==null||userId=="")
 		{
 			sr.setStatus(2);
@@ -196,8 +196,8 @@ public class OrderServlet extends HttpServlet {
 	private void detail_order(HttpServletRequest request, HttpServletResponse response)
 	{
 		ServerResponse<Order> sr= new ServerResponse<Order>();
-		String userId=(String) request.getSession().getAttribute("userId");
-		userId="1";
+		String userId=(String) request.getSession().getAttribute("userid");
+		//userId="1";
 		if(userId==null||userId=="")
 		{
 			sr.setStatus(2);
@@ -258,8 +258,8 @@ public class OrderServlet extends HttpServlet {
 	private void cancel_order(HttpServletRequest request, HttpServletResponse response)
 	{
 		ServerResponse<Order> sr= new ServerResponse<Order>();
-		String userId=(String) request.getSession().getAttribute("userId");
-		userId="1";
+		String userId=(String) request.getSession().getAttribute("userid");
+		//userId="1";
 		if(userId==null||userId=="")
 		{
 			sr.setStatus(3);

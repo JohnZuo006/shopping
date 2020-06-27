@@ -98,6 +98,7 @@ public class ProductServiceImpl implements ProductService {
 		}
 		resp.setStatus(0);
 		resp.setData(page);
+		//System.out.println(resp);
 		return resp;
 	}
 	@Override

@@ -68,7 +68,7 @@ public class PayServiceImpl implements IPayService {
 	@Override
 	public void call_back(String OrderNo,String tradeNo) {
 		// TODO Auto-generated method stub
-		String sql="update pay set platformNumber=? where orderNo=?";
+		String sql="update pay set platformNumber=?,platformStatus='已支付' where orderNo=?";
 		int re =JdbcUtil.executeUpdate(sql, tradeNo,OrderNo);
 		String sql2="update theOrder set paymentTime=now(),orderStatus='已支付' where orderNo=?";
 		int re2=JdbcUtil.executeUpdate(sql2, OrderNo);

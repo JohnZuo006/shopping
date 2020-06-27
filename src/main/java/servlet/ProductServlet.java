@@ -111,11 +111,14 @@ public class ProductServlet extends HttpServlet {
 
 	private void list(HttpServletRequest request, HttpServletResponse response) {
 		ServerResponse<Page<List<Product>>> sr = new ServerResponse<Page<List<Product>>>();
-		String userId = (String) request.getSession().getAttribute("userId");
+		String userId =(String)request.getSession().getAttribute("userid");
+		System.out.println(userId);
 		userId = "1";
+		
 		if (userId == null || userId == "") {
 			sr.setStatus(1);
 			sr.setMsg("用户未登录");
+			//System.out.println(sr);
 		} else {
 			String pageSize = request.getParameter("limit");
 			String pageNum = request.getParameter("page");
@@ -127,6 +130,7 @@ public class ProductServlet extends HttpServlet {
 			}
 			ProductServiceImpl ps = new ProductServiceImpl();
 			sr = ps.list_logic(Integer.parseInt(pageSize), Integer.parseInt(pageNum));
+			//System.out.println(sr);
 		}
 		Gson gson = new Gson();
 		String json = gson.toJson(sr);

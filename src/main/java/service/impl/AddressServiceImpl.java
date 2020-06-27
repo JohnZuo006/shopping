@@ -98,8 +98,8 @@ public class AddressServiceImpl implements IAddressService {
 		// TODO Auto-generated method stub
 		ServerResponse<Page<List<Address>>> resp = new ServerResponse<Page<List<Address>>>();
 		// 获取数据库中数据总数
-		String sql = "select count(*) as count from address";
-		int sum = JdbcUtil.getSum(sql);
+		String sql = "select count(*) as count from address where userId=?";
+		int sum = JdbcUtil.getSum(sql,userId);
 		// 计算分页总数
 		int pages = sum % pageSize == 0 ? sum / pageSize : (sum / pageSize) + 1;
 		System.out.println("pages=" + pages);
@@ -108,8 +108,8 @@ public class AddressServiceImpl implements IAddressService {
 		int startRow = (pageNum - 1) * pageSize;
 		int endRow = startRow + pageSize > sum ? sum : startRow + pageSize;
 		// 获取当前页的数据
-		String sql2 = "select * from address limit ?,?";
-		List<Address> list = JdbcUtil.executeQuery(sql2, Address.class, startRow, pageSize);
+		String sql2 = "select * from address where userId=? limit ?,?";
+		List<Address> list = JdbcUtil.executeQuery(sql2, Address.class,userId, startRow, pageSize);
 
 		// 将数据赋值到page里面
 		Page<List<Address>> page = new Page<List<Address>>();
