@@ -80,11 +80,24 @@ public class OrderServiceImpl implements IOrderService {
 	}
 
 	@Override
-	public ServerResponse<Page<List<Order>>> list_order_logic(String userId, int pageSize, int pageNum) {
+	public ServerResponse<Page<List<Order>>> list_order_logic(String userId, int pageSize, int pageNum,String otype) {
 		ServerResponse<Page<List<Order>>> resp = new ServerResponse<>();
-		// 获取数据库中数据总数
 		String sql = "select count(*) as count from theOrder where userId=?";
-		int sum = JdbcUtil.getSum(sql, userId);
+		String sql2 = "select * from theOrder where userId=? order by orderId desc limit ?,?";
+		int sum =0;
+		if(otype==null||otype=="")
+		{
+			sum= JdbcUtil.getSum(sql,userId );
+		}
+		else
+		{
+			sql="select count(*) as count from theOrder where userId=? and orderStatus=?";
+			sum=JdbcUtil.getSum(sql,userId,otype );
+			sql2="select * from theOrder where userId=? and orderStatus=? order by orderId desc limit ?,?";
+		}
+		// 获取数据库中数据总数
+		
+		
 		// 计算分页总数
 		int pages = sum % pageSize == 0 ? sum / pageSize : (sum / pageSize) + 1;
 		System.out.println("pages=" + pages);
@@ -93,8 +106,16 @@ public class OrderServiceImpl implements IOrderService {
 		int startRow = (pageNum - 1) * pageSize;
 		int endRow = startRow + pageSize > sum ? sum : startRow + pageSize;
 		// 获取当前页的数据
-		String sql2 = "select * from theOrder where userId=? order by orderId desc limit ?,?";
-		List<OrderT> list = JdbcUtil.executeQuery(sql2, OrderT.class,userId, startRow, pageSize);
+		List<OrderT> list;
+		if(otype==null||otype=="")
+		{
+			list= JdbcUtil.executeQuery(sql2, OrderT.class,userId, startRow, pageSize);
+		}
+		else
+		{
+			list = JdbcUtil.executeQuery(sql2, OrderT.class,userId,otype, startRow, pageSize);
+		}
+		
 		List<Order> orders=new ArrayList<Order>();
 		for(OrderT order:list)
 		{

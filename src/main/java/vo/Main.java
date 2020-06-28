@@ -71,7 +71,7 @@ public class Main {
             .setGatewayUrl("http://mcloudmonitor.com/gateway.do").setCharset("GBK")
             .setFormat("json").build();
     }
-
+    
     // 简单打印应答
     private void dumpResponse(AlipayResponse response) {
         if (response != null) {

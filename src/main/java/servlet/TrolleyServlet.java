@@ -2,6 +2,7 @@ package servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -49,6 +50,7 @@ public class TrolleyServlet extends HttpServlet {
 		response.setHeader("content-type", "text/html;charset=UTF-8");
 		response.setCharacterEncoding("UTF-8");
 		String type = request.getParameter("type");
+		System.out.println(new Date()+"trolleyservlet+"+type);
 		if(type!=null)
 		{
 			if(type.equals("add"))  //添加到购物车

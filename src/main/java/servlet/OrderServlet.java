@@ -96,6 +96,7 @@ public class OrderServlet extends HttpServlet {
 	{
 		ServerResponse<Order> sr= new ServerResponse<Order>();
 		String userId=request.getSession().getAttribute("userid").toString();
+		//String userId=request.getParameter("userId");
 		//userId="2";
 		if(userId==null||userId=="")
 		{
@@ -124,7 +125,9 @@ public class OrderServlet extends HttpServlet {
 	private void list_order(HttpServletRequest request, HttpServletResponse response)
 	{
 		ServerResponse<Page<List<Order>>> sr= new ServerResponse<>();
-		String userId=(String) request.getSession().getAttribute("userid");
+		String userId=request.getSession().getAttribute("userid").toString();
+		String otype=request.getParameter("otype");
+		//String userId=request.getParameter("userId");
 		//userId="1";//测试用
 		if(userId==null||userId=="")
 		{
@@ -144,7 +147,7 @@ public class OrderServlet extends HttpServlet {
 				pageNum="1";
 			}
 			OrderServiceImpl os=new OrderServiceImpl();
-			sr=os.list_order_logic(userId,Integer.parseInt(pageSize),Integer.parseInt(pageNum));
+			sr=os.list_order_logic(userId,Integer.parseInt(pageSize),Integer.parseInt(pageNum),otype);
 		}
 		Gson gson = new Gson();
 		String json = gson.toJson(sr);
@@ -196,7 +199,7 @@ public class OrderServlet extends HttpServlet {
 	private void detail_order(HttpServletRequest request, HttpServletResponse response)
 	{
 		ServerResponse<Order> sr= new ServerResponse<Order>();
-		String userId=(String) request.getSession().getAttribute("userid");
+		String userId=request.getSession().getAttribute("userid").toString();
 		//userId="1";
 		if(userId==null||userId=="")
 		{
