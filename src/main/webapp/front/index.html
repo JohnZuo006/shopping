@@ -5,6 +5,17 @@
 		<title>睿乐购平台</title>
 		<link rel="stylesheet" type="text/css" href="./css/style.css">
 		<link rel="stylesheet" href="layui/css/layui.css" media="all">
+		<style>
+			#test1{
+			}
+			#left1{
+			z-index:100;
+			}
+			.banner_y{
+				position: relative;
+				display: flex;
+			}
+		</style>
 		<script src="js/jquery-3.5.1.min.js"></script>
 		<script src="layui/layui.js"></script>
 		<script>
@@ -137,18 +148,10 @@
 		</div>
 <!-- end banner_x -->
 <div id="main">
-          <div class="layui-carousel" id="test1" style="position: absolute;top: 140px;left: 382px;">
-			  <div carousel-item>
-			    <div><a href="xiangqing.html?productid=10"><img src="image/5.jpg" width="992px" height="460px"/></a></div>
-			    <div><a href="xiangqing.html?productid=11"><img src="image/4.jpg" width="992px" height="460px"/></a></div>
-			    <div><a href="xiangqing.html?productid=3"><img src="image/2.jpg" width="992px" height="460px"/></a></div>
-			    <div><a href="xiangqing.html?productid=1"><img src="image/3.jpg" width="992px" height="460px"/></a></div>
-			    <div><a href="xiangqing.html?productid=4"><img src="image/1.jpg" width="992px" height="460px"/></a></div>
-			  </div>
-			</div>
+          
 	<!-- start banner_y -->
 		<div class="banner_y center">
-			<div class="nav">				
+			<div class="nav" id="left1">				
 				<ul>
 					<li>
 						<a href="">智能手机</a>
@@ -1409,8 +1412,17 @@
 						</div>
 					</li>
 				</ul>
+				
 			</div>
-		
+		<div class="layui-carousel" id="test1" style="">
+					  <div carousel-item>
+					    <div><a href="xiangqing.html?productid=10"><img src="image/5.jpg" width="992px" height="460px"/></a></div>
+					    <div><a href="xiangqing.html?productid=11"><img src="image/4.jpg" width="992px" height="460px"/></a></div>
+					    <div><a href="xiangqing.html?productid=3"><img src="image/2.jpg" width="992px" height="460px"/></a></div>
+					    <div><a href="xiangqing.html?productid=1"><img src="image/3.jpg" width="992px" height="460px"/></a></div>
+					    <div><a href="xiangqing.html?productid=4"><img src="image/1.jpg" width="992px" height="460px"/></a></div>
+					  </div>
+					</div>
 		</div>	
 
 		<div class="sub_banner center">
