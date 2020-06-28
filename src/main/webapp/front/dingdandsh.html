@@ -74,7 +74,7 @@
 			  //订单列表order
 			  table.render({
 				  elem: '#demo'
-				  ,url: 'http://localhost:8080/shopping/Order?type=list' //数据接口
+				  ,url: 'http://localhost:8080/shopping/Order?type=list&otype=已发货' //数据接口
 				  ,toolbar: '<div>全选</div>' 
 				  ,page: true //开启分页
 				  ,id:'demotable'
@@ -179,8 +179,8 @@
 			<div class="ddzx">订单中心</div>
 			<div class="subddzx">
 				<ul>
-					<li><a href="" style="color:#ff6700;font-weight:bold;">我的订单</a></li>
-					<li><a href="./dingdandsh.html">待收货</a></li>
+					<li><a href="./dingdanzhongxin.html">我的订单</a></li>
+					<li><a href="" style="color:#ff6700;font-weight:bold;">待收货</a></li>
 					<li><a href="">评价晒单</a></li>
 					<li><a href="">退款/售后</a></li>
 				</ul>

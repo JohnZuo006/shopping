@@ -90,13 +90,15 @@
 							if(res.data.productStatus != 0)
 							$("#status").html("该商品已下架,不可购买!")
 							$("#name").html(res.data.productName)
-							$("#detail").html(res.data.detail)
+							//$("#detail").html(res.data.detail)
 							$("#subtitle").html(res.data.productSubtitle)
 							$("#price").html(res.data.price)
 							$("#allprice").html("总价:"+res.data.price)
 							$("#stock").html(res.data.stock)
 							$("#image").html('<img src="'+res.data.mainImage+'">')	
 							max = res.data.stock
+							let div=$('<div>111'+res.data.detail+'</div>')
+							$("#detail").append(div)
 						}
 					},
 					error:function(){
@@ -254,7 +256,7 @@
 		<div class="right fr">
 		    <div class="h3 ml20 mt20" ><div class="h44" id="status"></div></div>
 			<div class="h3 ml20 mt20" id="name">主标题</div>
-			<div class="jianjie mr40 ml20 mt10"  id="detail">此处是商品的详细介绍</div>
+			<!-- <div class="jianjie mr40 ml20 mt10"  id="detail">此处是商品的详细介绍</div> -->
 			<div class="h3 ml20 mt20"><div class="h4" >库存:&nbsp;<span id="stock">0</span>&nbsp;件</div></div>
 			<div id="but">
              <span >数量:&nbsp;</span>
@@ -281,6 +283,7 @@
 			</div>
 		</div>
 		<div class="clear"></div>
+		<div id="detail"></div>
 	</div>
 	</form>
 	<!-- footer -->

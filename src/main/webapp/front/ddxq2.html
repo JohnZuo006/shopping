@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>订单详情-小米商城</title>
+		<link rel="stylesheet" type="text/css" href="./css/style.css">
+		<link rel="stylesheet" href="layui/css/layui.css" media="all">
+		<script src="js/jquery-3.5.1.min.js"></script>
+		<script src="layui/layui.js"></script>
+		<style type="text/css">
+			#back {
+				position: absolute;
+				margin-left: 10px;
+				margin-top: 20px;
+			}
+
+			#text1 {
+				position: absolute;
+				margin-left: 160px;
+			}
+
+			#futu {
+				width: 40px;
+				height: 40px;
+			}
+
+			.delecss {
+				font-size: 30px;
+			}
+
+			#address {
+				font-size: 18px;
+			}
+			.ddxq{
+				width: 978px;
+				height: 100%;
+				padding: 2px;
+			    border-style:solid; 
+				border-width:2px; 
+				border-color: #f3f3f3;
+				position: relative;
+				font-size: 18px;
+			}
+			.a{
+				position: relative;
+				background-color: #F3F3F3;
+				
+			}
+			.b{
+				position: absolute;
+				left: 0px;
+				height: 100px;
+				width: 100px;
+				
+			}
+			.c{
+				position: absolute;
+				left:100px;
+				height:100px;
+				
+			}
+			.c.label
+			{
+				height: 25px;
+			}
+			
+			.btn{
+				width:auto;
+				height:25px;
+				border:none;
+				margin-left:55px;
+				background: #ff6700;
+				color: #ffffff;
+				font-size: 15px;
+				font-weight: bold;
+				letter-spacing: 2px;
+				cursor:pointer;
+				border-radius: 4px;
+				margin: 10px;
+				border-style:solid; 
+				border-width: 1px;
+				border-color: #f3f3f3;
+			}
+			.label{
+				height: 25px;
+			}
+			.btnmenu{
+				position:absolute;
+				bottom: 10px;
+				right: 5px;
+			}
+		</style>
+		<script src="js/jquery-3.5.1.min.js"></script>
+		<script>
+			$(function(){
+			$.ajax({
+				type:"get",
+				url:"http://localhost:8080/shopping/User",
+				data:{
+					"type":"getInformation"
+				},
+				dataType:"json",
+				success:function(res){
+					if(res['status']==0)
+					{
+						$("#user1").html("欢迎您! "+res.data.userName)
+						$("#user2").html("<a href=self_info.html>个人中心</a>")
+						$("#out").html("退出登录")
+					}
+				},
+				error:function(){
+				},
+				xhrFields: {
+					withCredentials: true
+				}
+			})
+			$("#out").click(function(){
+				$.ajax({
+					type:"get",
+					url:"http://localhost:8080/shopping/User",
+					data:{
+						"type":"loginOut"
+					},
+					dataType:"json",
+					success:function(res){
+						console.log(res)
+						if(res['status']==0)
+						{
+							console.log("0")
+							window.location.href="login.html"
+						}
+					},
+					error:function(res){
+						
+					},
+					xhrFields: {
+						withCredentials: true
+					}
+				})	
+			})
+			})
+			let orderNo=GetQueryString('orderNo')
+			$.ajax({
+				type:"post",
+				url:"http://localhost:8080/shopping/Order",
+				data:{
+					"type":"detail",
+					"orderNo":orderNo
+				},
+				dataType:"json",
+				success:function(res){
+					console.log(res)
+					if(res['status']==0)
+					{
+						$('#labelX').text(res.data.orderStatus)
+						$('#labelY').text(res.data.orderNo)
+						$('#sumeofmoney').text(res.data.payment)
+						$('#postage').text(res.data.postage)
+						$('#createtime').text(res.data.createTime)
+						$('#sendtime').text(res.data.sendTime)
+						$('#paytime').text(res.data.paymentTime)
+						$('#closetime').text(res.data.closeTime)
+						$('#endtime').text(res.data.endTime)
+						let list=res.data.orderDetail
+						// $('.a').css({
+						// 	width:"100%",
+						// 	height:"500px"
+						// })
+						for(let i=0;i<list.length;i++)
+						{
+							const div=$('<div class="b"><img width="100px" height="100px" src="'+list[i].productImage+'" /  ></div>'+
+						'<div class="c"><label>商品名称:</label><label>'+list[i].productName+'</label><br />'+
+						'<label>商品单价:</label><label>'+list[i].currentUnitPrice+'</label><br/>'+
+						'<label>商品数量:</label><label>'+list[i].quantity+'</label><br/>'+
+						'<label>商品总价:</label><label>'+list[i].totalPrice+'</label><br/></div><br><br><br><br><br>')
+						$(".a").append(div)
+						}
+						
+					}
+				},
+				error:function(res){
+					
+				},
+				xhrFields: {
+					withCredentials: true
+				}
+			})
+			//获取参数
+			function GetQueryString(name) {
+			    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+			    var r = window.location.search.substr(1).match(reg);
+			    if(r != null) return decodeURI(r[2]);
+			    return null;
+			}
+		</script>
+
+	</head>
+	<body>
+		<!-- start header -->
+		<!--end header -->
+
+		<!-- start banner_x -->
+		<div class="banner_x center">
+			<a href="./index.html" target="_blank" id="back"><img src="./image/mistore_logo.png" alt=""></a>
+			<div id="text1">
+				<div class="wdgwc fl ml40">订单详情界面</div>
+				<div class="wxts fl ml20">温馨提示：产品是否购买成功，以最终下单为准哦，请尽快结算</div>
+			</div>
+			<div class="dlzc fr">
+				<ul>
+					<li id="user1"><a href="login.html">登录</a></li>
+					<li>&nbsp;&nbsp;|</li>
+					<li id="user2"><a href="self_info.html">注册</a></li>
+					<li>&nbsp;&nbsp;|</li>
+					<li><a href="index.html">主页</a></li>
+					<li>&nbsp;&nbsp;|</li>
+					<li><a href="#" id="out"></a></li>
+				</ul>
+			</div>
+
+			<div class="clear"></div>
+		</div>
+		<div class="xiantiao"></div>
+		<div class="gwcxqbj">
+			<div id="centers" class="gwcxd center">
+				<div class="ddxq">
+					<label>订单状态:</label>
+					<label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+					<label id="labelX">交易中</label><br />
+					<label>订单编号:</label>
+					<label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+					<label id="labelY">123456789</label>
+					<div  class="a">
+
+					</div>
+					<div>
+						<label>总金额:</label>
+						<label   id="sumeofmoney">110</label><br />
+						<span></span>
+						<label>邮费:</label>
+						<label id="postage">10</label><br />
+						<span></span>
+						<label   >订单创建时间:</label>
+						<label id="createtime"></label><br />
+						<span></span> 
+						<label   >订单支付时间:</label>
+						<label id="paytime"></label><br />
+						<span></span> 
+						<label   >订单发货时间:</label>
+						<label id="sendtime"></label><br />
+						<span></span> 
+						<label   >订单关闭时间:</label>
+						<label id="closetime"></label><br />
+						<span></span> 
+						<label   >订单结束时间:</label>
+						<label id="endtime"></label><br />
+						<span></span> 
+					</div>
+					<div   class="btnmenu">
+				
+						<input type="button" value="查看物流信息"  class="btn"/>
+						<input type="button" value="确认收货"      class="btn"/>
+						<input type="button" value="申请售后"      class="btn"/>
+						
+					</div>
+					
+				
+				</div>
+			</div>
+		</div>
+
+
+	</body>
+</html>
