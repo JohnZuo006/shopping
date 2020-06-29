@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="./sim/styles/simditor.css" />
+		<script src="./sim/scripts/jquery.min.js"></script>
+		<script src="./sim/scripts/module.js"></script>
+		<script src="./sim/scripts/hotkeys.js"></script>
+		<script src="./sim/scripts/uploader.js"></script>
+		<script src="./sim/scripts/simditor.js"></script>
+	</head>
+	<body>
+		<textarea id="editor" placeholder="Balabala" autofocus></textarea>
+		<button type="button" id="submit">更新商品详情</button>
+		<script>
+			$(function() {
+				var editor = new Simditor({
+					textarea: $('#editor'),
+					upload: {
+						url: 'http://localhost:8080/shopping/Upload', //文件上传的接口地址
+						params: null, //键值对,指定文件上传接口的额外參数,上传的时候随文件一起提交
+						fileKey: 'uploadfile', //server端获取文件数据的參数名
+						connectionCount: 3,
+						leaveConfirm: '正在上传文件'
+					}
+				})
+				let productId = GetQueryString('id')
+				$.ajax({
+					url: "http://localhost:8080/shopping/Product",
+					type: "post",
+					data: {
+						'type': 'detail',
+						'productId': productId
+					},
+					dataType: 'json',
+					success: function(data) {
+						console.log(data)
+						if (data.status == 0) {
+							editor.setValue(data.data.detail)
+						} else {
+							alert(data.msg);
+						}
+					},
+					error: function(data) {
+					}
+				})
+				$('#submit').click(function() {
+					let detail = editor.getValue()
+					$.ajax({
+						url: "http://localhost:8080/shopping/Product",
+						type: "post",
+						data: {
+							'type': 'updateDetail',
+							'productId': productId,
+							'detail':detail
+						},
+						dataType: 'json',
+						success: function(data) {
+							console.log(data)
+							if (data.status == 0) {
+								alert('更新成功')
+								window.location.href='product-list.html'
+							} else {
+								alert(data.msg);
+							}
+						},
+						error: function(data) {
+						}
+					})
+				})
+			})
+
+			function GetQueryString(name) {
+				var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+				var r = window.location.search.substr(1).match(reg);
+				if (r != null) return decodeURI(r[2]);
+				return null;
+			}
+		</script>
+	</body>
+</html>

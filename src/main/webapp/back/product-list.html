@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>商品列表</title>
+  <link rel="stylesheet" href="lib/layui/css/layui.css" media="all">
+  <script src="js/jquery.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="./sim/styles/simditor.css" />
+  <script src="./sim/scripts/jquery.min.js"></script>
+  <script src="./sim/scripts/module.js"></script>
+  <script src="./sim/scripts/hotkeys.js"></script>
+  <script src="./sim/scripts/uploader.js"></script>
+  <script src="./sim/scripts/simditor.js"></script>
+  <style>
+	  #app{
+		  position: relative;
+	  }
+	  #app>#appx{
+		  position: absolute;
+		  right: 120px;
+	  }
+	  #app>#appy{
+		  position: absolute;
+	  	  right: 20px;
+	  }
+	  .btn{
+		  background: #fe030f;
+		  color: #FFFFFF;
+	  }
+  </style>
+  
+</head>
+<body>
+	<div class="layui-fluid">
+	    <div class="layui-row layui-col-space15">
+	        <div class="layui-col-md12">
+	            <div class="layui-card">
+	                <div class="layui-card-body ">
+	                    <form class="layui-form layui-col-space5">
+	                         <div class="layui-card-header" id="app">
+								<div class="layui-inline layui-show-xs-block">
+									<input id="find" type="text" name="productNamex"  placeholder="请输入商品名" autocomplete="off" class="layui-input">
+								</div>
+								<div class="layui-inline layui-show-xs-block">
+									<button id="queryRole" class="layui-btn" data-type="reload" lay-submit="" lay-filter="search"><i class="layui-icon">&#xe615;</i></button>
+								</div>
+								<!-- <button id="appx" class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除</button> -->
+								<button id="appy" type="button" class="layui-btn"><i class="layui-icon"></i>添加</button>
+							</div>
+	                    </form>
+	                </div>
+				</div>
+			</div>
+		</div>
+    </div>     
+ <table id="demo" lay-filter="test"></table>
+ 
+ <script type="text/html" id="barDemo">
+	<a id="a1" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="gochange">切换状态</a>
+	<a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="edit">查看并编辑</a>
+	<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+ </script>
+<form class="layui-form" id="editx" style="display:none" lay-filter="formTest" enctype="multipart/form-data">
+	<div class="layui-form-item">
+		<label class="layui-form-label">商品名称</label>
+		<div class="layui-input-block">
+			<input id="pid" type="text" name="productName" required lay-verify="required|productName" placeholder="请输入商品名称"
+			 autocomplete="off" class="layui-input">
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">商品类别</label>
+		<div class="layui-input-block">
+			<select id="selectc" name="categoryId" lay-verify="required|categoryId">
+				<option value="">请选择类别</option>
+			</select>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">商品子标题</label>
+		<div class="layui-input-block">
+			<input type="text" name="productSubtitle" required lay-verify="required|productSubtitle" placeholder="请输入商品子标题"
+			 autocomplete="off" class="layui-input">
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">商品主图</label>
+		<div class="layui-input-block">
+			<input type="text" id="mainImage" name="mainImage" required lay-verify="required|productSubtitle" placeholder="请上传商品主图"
+			 autocomplete="off" class="layui-input">
+			 <input type="file" id="mainImg" name="mainImg"><button type="button" id="upMain">上传</button>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">商品子图</label>
+		<div class="layui-input-block">
+			<input type="text" id="subImages" name="subImages" required lay-verify="required|productSubtitle" placeholder="请上传商品子图"
+			 autocomplete="off" class="layui-input">
+			 <input type="file" id="subImg" name="subImg"><button type="button" id="upSub">上传</button>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">商品价格</label>
+		<div class="layui-input-block">
+			<input type="text" name="price" required lay-verify="required|price" placeholder="请输入商品价格" autocomplete="off"
+			 class="layui-input">
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">商品库存</label>
+		<div class="layui-input-block">
+			<input type="text" name="stock" required lay-verify="required|stock" placeholder="请输入商品库存量" autocomplete="off"
+			 class="layui-input">
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">商品状态</label>
+		<div class="layui-input-block">
+			<select name="productStatus" lay-verify="required|productStatus" lay-filter="test">
+				<option value="0">在售</option>
+				<option value="1">下架</option>
+			</select>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">商品详情</label>
+		<div class="layui-input-block">
+			<!-- <textarea name="detail" required lay-verify="detail" placeholder="请输入商品详细信息" class="layui-textarea"></textarea> -->
+			<button type="button" id="editDetails">编辑商品详情</button>
+		</div>
+	</div>
+	<!-- 富文本 -->
+	<!-- <textarea id="editor" placeholder="请填写商品详情" autofocus></textarea> -->
+	<div class="layui-form-item">
+		<div class="layui-input-block">
+			<button id="resubmit" class="layui-btn" lay-submit lay-filter="demo22">立即提交</button>
+			<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+			<button id="close" class="layui-btn layui-btn-primary btn">关闭</button>
+		</div>
+	</div>
+</form>
+<script src="lib/layui/layui.all.js"></script>
+<script>
+	$(function(){
+		//富文本
+		/* var editor = new Simditor({
+			textarea: $('#editor'),
+			upload: {
+				url: 'http://ser.zuoxinlei.top:38000/shopping/Upload', //文件上传的接口地址
+				params: null, //键值对,指定文件上传接口的额外參数,上传的时候随文件一起提交
+				fileKey: 'uploadfile', //server端获取文件数据的參数名
+				connectionCount: 3,
+				leaveConfirm: '正在上传文件'
+			}
+			//optional options
+		}); */
+		layui.use(['table','laypage','form','upload'], function(){
+		  var table = layui.table;
+		  var laypage = layui.laypage;
+		  var form = layui.form; //只有执行了这一步，部分表单元素才会自动修饰成功
+  
+		table.render({
+			elem: '#demo'
+			,url: 'http://localhost:8080/shopping/Product?type=list' //数据接口
+			,toolbar: '<div>全选</div>' 
+			,page: true //开启分页
+			,id:'demotable'
+	  
+			,parseData: function(res){ //res 即为原始返回的数据
+				return {
+					"code": res.status, //解析接口状
+					"data": res.data.list,//解析数据列表
+					"count":res.data.total
+				};
+			}
+			,response: {
+				statusCode: 0 //规定成功的状态码，默认：0
+			} 
+			,limits:[5,8,10,12]
+			,cols: [[ //表头
+				{field: 'left',type:'checkbox',align:'center',fixed: 'left'}
+				,{field: 'productId', title: 'ID', sort: true}
+				,{field: 'productName', title: '商品名称'}
+				,{field: 'categoryId', title: '商品类别'}
+				,{field: 'productSubtitle', title: '商品子标题'} 
+				,{field: 'mainImage', title: '主图'}
+				,{field: 'subImages', title: '子图'}
+				,{field: 'detail',title: '详情'}
+				,{field: 'price', title: '价格'}
+				,{field: 'stock',title: '库存'}
+				,{field: 'productStatus', title: '状态'}
+				,{field: 'createTime', title: '创建时间'}
+				,{field: 'updateTime',title: '更新时间'}
+				,{fixed: 'right', align:'center', toolbar: '#barDemo',title: '操作',width:205} //这里的toolbar值是模板元素的选择器
+			  ]]
+			});
+			
+			
+			//监听表格复选框选择
+			table.on('checkbox(demo)', function (obj) {
+			    console.log(obj)
+			});
+			
+			//监听工具条
+			table.on('tool(test)', function(obj){ //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+			  var data = obj.data; //获得当前行数据
+			  var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+			  var tr = obj.tr; //获得当前行 tr 的 DOM 对象（如果有的话）
+			  
+			  if(layEvent === 'gochange'){ //上下架
+				
+				let thestatus
+				if(data.productStatus == 0){
+					inx = 0
+					thestatus = 1
+					layer.msg('已下架!',{icon: 1,time:1000});
+				}else{
+					inx = 1
+					thestatus = 0
+					layer.msg('已上架!',{icon: 1,time:1000});
+				}
+				$.ajax({
+					type:"get",
+					data:{
+						"type":"status",
+						"productid":data.productId,
+						"status":thestatus
+					},
+					url:"http://localhost:8080/shopping/Product",
+					dataType:"json",
+					success:function(res){
+						//alert(333)
+						console.log(res)
+						if(res['status']==0)
+						{
+							alert(res.msg)
+						}
+						else{
+							alert(res.msg)
+						}
+					},
+					error:function(){
+						
+					},
+					xhrFields: {
+						withCredentials: true
+					}
+				})
+				table.reload('demotable', {})
+				
+			  } else if(layEvent === 'del'){ //删除
+				layer.confirm('您确定要删除 '+data.productName+' 吗', function(index){
+					$.ajax({
+						type:'post',
+						data:{"type":"delete",
+							"productId":data.productId
+						},
+						url:'http://localhost:8080/shopping/Product',
+						success:function (res) {
+							if(res[10]==0){
+								layer.msg("删除成功", {icon: 6});
+								setTimeout(function(){
+									layer.closeAll();//关闭所有的弹出层
+								}, 1000);
+							}else{
+								layer.msg("删除失败", {icon: 5});
+							}
+						}
+					})
+					obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+					layer.close(index);
+					//向服务端发送删除指令
+					
+					//监听id
+					console.log("index:"+index)
+				});
+			  } else if(layEvent === 'edit'){ //编辑
+				form.val("formTest", data);
+				layer.open({
+					title: "修改商品信息",
+					type : 1,
+					area: ['1200px', '590px'],
+					content: $('#editx'),
+					closeBtn :0,
+					success: function(layero,index){
+					    console.log(layero,index);
+						console.log(data)
+					}
+				});
+			  }
+			  $("#upSub").click(function(){
+				  let formData=new FormData()
+				  let file=$('#subImg').prop('files')
+				  console.log(file)
+				  formData.append("file",file[0])
+				  $.ajax({
+				              url:"http://localhost:8080/shopping/Upload",
+				              type:"post",
+				              data: formData,
+				              contentType: false,
+				              processData: false,
+							  dataType:'json',
+				              success: function(data) {
+								  console.log(data)
+				                  if (data.status == 0) {
+				                      $('#subImages').val(data.data)
+				                  } else {
+				                      alert(data.msg);
+				                  }
+				              },
+				              error:function(data) {
+				                  alert("上传失败")
+				              }
+				          })
+			  })
+			  $("#upMain").click(function(){
+			  				  let formData=new FormData()
+			  				  let file=$('#mainImg').prop('files')
+			  				  console.log(file)
+			  				  formData.append("file",file[0])
+			  				  $.ajax({
+			  				              url:"http://localhost:8080/shopping/Upload",
+			  				              type:"post",
+			  				              data: formData,
+			  				              contentType: false,
+			  				              processData: false,
+			  							  dataType:'json',
+			  				              success: function(data) {
+			  								  console.log(data)
+			  				                  if (data.status == 0) {
+			  				                      $('#mainImage').val(data.data)
+			  				                  } else {
+			  				                      alert(data.msg);
+			  				                  }
+			  				              },
+			  				              error:function(data) {
+			  				                  alert("上传失败")
+			  				              }
+			  				          });
+			  })
+			  $("#editDetails").click(function(){
+				  let productId=data.productId
+				  window.location.href="editDetails.html?id="+productId
+			  })
+			  //关闭
+			  $("#close").click(()=>{
+				  layer.close()
+			  })
+			   //修改商品信息
+			   $("#resubmit").click(function(){
+			   	console.log("productId:"+data.productId)
+			   	let productId=data.productId
+			   	let productName=$("[name='productName']").val()
+			   	let categoryId=$("[name='categoryId']").val()
+			   	let productSubtitle=$("[name='productSubtitle']").val()
+			   	let mainImage=$("[name='mainImage']").val()
+			   	let subImages=$("[name='subImages']").val()
+			   	let price=$("[name='price']").val()
+			   	let stock=$("[name='stock']").val()
+			   	let productStatus=$("[name='productStatus']").val()
+			   	let detail=$("[name='detail']").val()
+			   	
+			   	let con=confirm("请查看信息是否正确\n"+"ID"+productId+"\n商品名:"+productName+"\n品类ID:"+categoryId+"\n子标题:"+productSubtitle+
+			   	"\n价格:"+price+"\n库存:"+stock+"\n状态:"+productStatus+"\n详情:"+detail)
+			   	if(con)
+			   	{
+			   		$.ajax({
+			   			type:"post",
+			   			data:{"type":"update",
+			   			"productid":productId,
+			   			"name":productName,
+			   			"categoryid":categoryId,
+			   			"subtitle":productSubtitle,
+			   			"price":price,
+			   			"stock":stock,
+			   			"status":productStatus,
+			   			"detail":detail,
+						"mainImage":mainImage,
+						"subImages":subImages
+			   			},
+			   			url:"http://ser.zuoxinlei.top:38000/shopping/Product",
+			   			dataType:"json",
+			   			success:function(res){
+			   				//alert(333)
+			   				console.log(res)
+			   				if(res['status']==0)
+			   				{
+			   					alert(res.msg)
+			   				}
+			   				else{
+			   					alert(res.msg)
+			   				}
+			   			},
+			   			error:function(){
+			   				
+			   			},
+			   			xhrFields: {
+			   				withCredentials: true
+			   			},
+						async:false
+			   		})
+			   	}
+			   });
+			});
+			
+			//根据productName关键字查询
+			form.on('submit(search)', function(data){
+				let keyword=$("[name='productNamex']").val()
+				if(keyword === ''){
+					layer.msg('请输入要查询的商品名称');
+				}
+				else{
+					//数据表格重载
+					table.reload('demotable', {
+						page: {
+							curr: 1 //重新从第 1 页开始
+						}
+						, where: {//这里传参  向后台
+							'keyword': keyword
+						}
+						, url: 'http://localhost:8080/shopping/Product?type=search'//后台做模糊搜索接口路径
+						, method: 'post'
+					});
+					return false;//false：阻止表单跳转  true：表单跳转
+				}
+			});
+			
+		});
+		//这个是显示弹出添加的页面
+		$("#appy").click(function(){
+			layui.use('layer', function(){
+			  var layer = layui.layer;
+			  layer.open({
+				  type:2,
+				  title:'添加商品',
+				  content:'product-add.html',
+				  skin: 'demo-class',
+				  area: ['1200px', '590px']
+			  })
+			}); 
+		})
+		$.ajax({
+			type:"post",
+			data:{"type":"getAll"
+			},
+			url:"http://localhost:8080/shopping/Category",
+			dataType:"json",
+			success:function(res){
+				//alert(333)
+				console.log(res)
+				if(res['status']==0)
+				{
+					let list = res.data
+					for(let i=0;i<list.length;i++){
+						const ops = $('<option value="'+list[i].categoryId+'">'+list[i].categoryName+'</option>')
+						$('#selectc').append(ops)
+					}
+				}
+				else{
+					$('#msg').text(res.msg)
+				}
+			},
+			error:function(){
+				
+			},
+			xhrFields: {
+				withCredentials: true
+			}
+		})
+	})
+</script>
+</body>
+</html>

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>商品添加</title>
+		<link rel="stylesheet" href="lib/layui/css/layui.css" media="all">
+		<script src="js/jquery.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="./sim/styles/simditor.css" />
+		<script src="./sim/scripts/jquery.min.js"></script>
+		<script src="./sim/scripts/module.js"></script>
+		<script src="./sim/scripts/hotkeys.js"></script>
+		<script src="./sim/scripts/uploader.js"></script>
+		<script src="./sim/scripts/simditor.js"></script>
+		<style>
+			form{
+				margin: 30px 30px;
+			}
+			#editor{
+				margin-left: 30px;
+				margin-right: 30px;
+			}
+		</style>
+	</head>
+	<body>
+		<form class="layui-form layui-form-pane" action="">
+			<div class="layui-form-item">
+				<label class="layui-form-label">商品名称</label>
+				<div class="layui-input-block">
+					<input type="text" name="productName" required lay-verify="productName" placeholder="请输入商品名称"
+					 autocomplete="off" class="layui-input">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">商品类别</label>
+				<div class="layui-input-block">
+					<select id="selectd" name="categoryId" lay-verify="categoryId">
+						<option value="">请选择类别</option>
+					</select>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">商品子标题</label>
+				<div class="layui-input-block">
+					<input type="text" name="productSubtitle" required lay-verify="productSubtitle" placeholder="请输入商品子标题"
+					 autocomplete="off" class="layui-input">
+				</div>
+			</div>
+			<!-- <div class="layui-form-item">
+				<label class="layui-form-label">商品主图</label>
+				<button type="button" class="layui-btn" id="mainI">
+				  <i class="layui-icon">&#xe67c;</i>上传主图
+				</button>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">商品子图</label>
+				<button type="button" class="layui-btn" id="subI">
+				  <i class="layui-icon">&#xe67c;</i>上传子图
+				</button>
+			</div> -->
+			<div class="layui-upload">
+			  <button type="button" class="layui-btn" id="test1">上传图片</button>
+			  <div class="layui-upload-list">
+			    <img class="layui-upload-img" id="demo1">
+			    <p id="demoText"></p>
+			  </div>
+			</div>   
+			<div class="layui-upload">
+			  <button type="button" class="layui-btn" id="test2">多图片上传</button> 
+			  <blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;">
+			    预览图：
+			    <div class="layui-upload-list" id="demo2"></div>
+			 </blockquote>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">商品价格</label>
+				<div class="layui-input-block">
+					<input type="text" name="price" required lay-verify="price" placeholder="请输入商品价格" autocomplete="off"
+					 class="layui-input">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">商品库存</label>
+				<div class="layui-input-block">
+					<input type="text" name="stock" required lay-verify="stock" placeholder="请输入商品库存量" autocomplete="off"
+					 class="layui-input">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">商品状态</label>
+				<div class="layui-input-block">
+					<select name="productStatus" lay-verify="productStatus" lay-filter="test">
+						<option value="">请选择商品状态</option>
+						<option value="0">在售</option>
+						<option value="1">下架</option>
+					</select>
+				</div>
+			</div>
+			<textarea id="editor" placeholder="请填写商品详情" autofocus></textarea>
+			<div class="layui-form-item">
+				<div class="layui-input-block">
+					<button id="submit" class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+					<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+				</div>
+			</div>
+		</form>
+
+		<script src="lib/layui/layui.js"></script>
+		<script>
+			$(function(){
+				var editor = new Simditor({
+					textarea: $('#editor'),
+					upload: {
+						url: 'http://localhost:8080/shopping/Upload', //文件上传的接口地址
+						params: null, //键值对,指定文件上传接口的额外參数,上传的时候随文件一起提交
+						fileKey: 'uploadfile', //server端获取文件数据的參数名
+						connectionCount: 3,
+						leaveConfirm: '正在上传文件'
+					}
+					//optional options
+				});
+				layui.use(['form', 'layer', 'upload','layedit', 'laydate'], function() {
+					var form = layui.form;
+					var upload = layui.upload;
+					var layer = layui.layer;
+					var layedit = layui.layedit;
+					var laydate = layui.laydate;
+					
+					//图片上传
+					var uploadInst = upload.render({
+					    elem: '#mainI' //绑定元素
+					    ,url: 'http://localhost:8080/shopping/Upload' //上传接口
+					    ,done: function(res){
+					      //上传完毕回调
+					    }
+					    ,error: function(){
+					      //请求异常回调
+					    }
+					 });
+					 upload.render({
+					   elem: '#mainI'
+					   ,url: 'http://localhost:8080/shopping/Upload'
+					   ,done: function(res, index, upload){ //上传后的回调
+					   
+					   } 
+					   //,accept: 'file' //允许上传的文件类型
+					   //,size: 50 //最大允许上传的文件大小
+					   //,……
+					 })
+					
+					$(function(){
+						//alert(111)
+						$("#submit").click(function(){
+							let productName=$("[name='productName']").val()
+							let categoryId=$("[name='categoryId']").val()
+							let productSubtitle=$("[name='productSubtitle']").val()
+							//let productName=$("[name='productName']").val()
+							//let categoryId=$("[name='categoryId']").val()
+							let price=$("[name='price']").val()
+							let stock=$("[name='stock']").val()
+							let productStatus=$("[name='productStatus']").val()
+							let detail=$("[name='detail']").val()
+							
+							let con=confirm("请查看信息是否正确\n"+"商品名:"+productName+"\n品类ID:"+categoryId+"\n子标题:"+productSubtitle+
+							"\n价格:"+price+"\n库存:"+stock+"\n状态:"+productStatus+"\n详情:"+detail)
+							if(con)
+							{
+								$.ajax({
+									type:"get",
+									data:{"type":"add",
+									"productName":productName,
+									"categoryId":categoryId,
+									"productSubtitle":productSubtitle,
+									"price":price,
+									"stock":stock,
+									"productStatus":productStatus,
+									"detail":detail
+									},
+									url:"http://localhost:8080/shopping/Product",
+									dataType:"json",
+									success:function(res){
+										//alert(333)
+										console.log(res)
+										if(res['status']==0)
+										{
+											alert(res.msg)
+										}
+										else{
+											alert(res.msg)
+										}
+									},
+									error:function(){
+										
+									},
+									xhrFields: {
+										withCredentials: true
+									}
+								})
+							}
+						})
+					})
+					//下拉选择框监听
+					form.on('select(test)', function(data) {
+						console.log(data);
+					});
+				});
+				$.ajax({
+					type:"post",
+					data:{"type":"getAll"
+					},
+					url:"http://localhost:8080/shopping/Category",
+					dataType:"json",
+					success:function(res){
+						//alert(333)
+						console.log(res)
+						if(res['status']==0)
+						{
+							let list = res.data
+							for(let i=0;i<list.length;i++){
+								const ops = $('<option value="'+list[i].categoryId+'">'+list[i].categoryName+'</option>')
+								$('#selectd').append(ops)
+							}
+						}
+						else{
+							$('#msg').text(res.msg)
+						}
+					},
+					error:function(){
+						
+					},
+					xhrFields: {
+						withCredentials: true
+					}
+				})
+			})
+		</script>
+	</body>
+</html>

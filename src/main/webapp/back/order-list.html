@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>商品列表</title>
+  <link rel="stylesheet" href="lib/layui/css/layui.css" media="all">
+  <script src="js/jquery.min.js"></script>
+  <style>
+	  #app{
+		  position: relative;
+	  }
+	  #app>#appx{
+		  position: absolute;
+		  right: 120px;
+	  }
+	  #app>#appy{
+		  position: absolute;
+	  	  right: 20px;
+	  }
+  </style>
+</head>
+<body>
+	<!-- <div class="layui-fluid">
+	    <div class="layui-row layui-col-space15">
+	        <div class="layui-col-md12">
+	            <div class="layui-card">
+	                <div class="layui-card-body ">
+	                    <form class="layui-form layui-col-space5">
+	                         <div class="layui-card-header" id="app">
+								<div class="layui-inline layui-show-xs-block">
+									<input type="text" name="username"  placeholder="请输入" autocomplete="off" class="layui-input">
+								</div>
+								<div class="layui-inline layui-show-xs-block">
+									<button class="layui-btn"  lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
+								</div>
+								<button id="appx" class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除</button>
+								<button id="appy" class="layui-btn" onclick="xadmin.open('添加商品','./member-add.html',600,400)"><i class="layui-icon"></i>添加</button>
+							</div>
+	                    </form>
+	                </div>
+				</div>
+			</div>
+		</div>
+	               -->
+ <table id="demo" lay-filter="test"></table>
+ <script type="text/html" id="barDemo">
+	<a class="layui-btn layui-btn-xs layui-btn-warm" lay-event="detail">查看详情</a>
+   <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit">发货</a>
+   <!-- <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a> -->
+   
+ </script>
+<script src="lib/layui/layui.all.js"></script>
+<script>
+	$(function(){
+		layui.use(['table','laypage','form','upload'], function(){
+		  var table = layui.table;
+		  var laypage = layui.laypage;
+		  var form = layui.form;
+		  var layer = layui.layer;
+		  
+		  //订单列表order
+		  table.render({
+			  elem: '#demo'
+			  ,url: 'http://localhost:8080/shopping/Order?type=adminList' //数据接口
+			  ,toolbar: '<div>全选</div>' 
+			  ,page: true //开启分页
+			  ,id:'demotable'
+			  ,parseData: function(res){ //res 即为原始返回的数据
+				  console.log(res)
+				  return {
+					"code": res.status, //解析接口状
+					"data": res.data.list,//解析数据列表
+					"count":res.data.total
+				  };
+			  }
+			  ,response: {
+				statusCode: 0 //规定成功的状态码，默认：0
+			  } 
+			  ,limits:[5,8,10,12]
+			  ,cols: [[ //表头
+				{field: 'orderNo', title: '订单编号',fixed: 'left'}
+				,{field: 'userId', title: '用户ID'}
+				,{field: 'addressId', title: '地址ID'} 
+				,{field: 'payment', title: '实付款'}
+				,{field: 'paymentType', title: '支付方式'}
+				,{field: 'postage', title: '邮费'}
+				,{field: 'orderStatus', title: '订单状态'}
+				,{field: 'createTime', title: '创建时间'}
+				,{field: 'updateTime',title: '更新时间'}
+				,{fixed: 'right', align:'center', toolbar: '#barDemo',title: '操作',width:155} //这里的toolbar值是模板元素的选择器
+			  ]]
+			});
+			
+			table.on('tool(test)', function(obj){ //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+			  var data = obj.data //获得当前行数据
+			  var layEvent = obj.event //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+			  var tr = obj.tr //获得当前行 tr 的 DOM 对象（如果有的话）
+			  let orderno =data.orderNo
+			  
+			  if(layEvent === 'detail'){ //查看
+				var layer = layui.layer; 
+				window.names = orderno;
+				layer.open({
+				  type:2,
+				  title:'订单详情&emsp;&emsp;订单编号：'+orderno,
+				  content:'order-detail.html',
+				  skin: 'demo-class',
+				  area: ['1200px', '590px']
+				});
+			  } else if(layEvent === 'del'){ //删除
+				layer.confirm('真的删除行么', function(index){
+				  obj.del() //删除对应行（tr）的DOM结构，并更新缓存
+				  layer.close(index)
+				  //向服务端发送删除指令
+				});
+			  } else if(layEvent === 'edit'){ //编辑
+				$.ajax({
+					type:"post",
+					data:{"type":"send",
+						"orderNo":orderno
+					},
+					url:"http://localhost:8080/shopping/Order",
+					dataType:"json",
+					success:function(res){
+						//alert(333)
+						console.log(res)
+						if(res['status']==0)
+						{
+							alert(res.msg)
+						}
+						else{
+							alert(res.msg)
+						}
+					},
+					error:function(){
+						
+					},
+					xhrFields: {
+						withCredentials: true
+					}
+				})
+			  } else if(layEvent === 'LAYTABLE_TIPS'){
+				layer.alert('Hi，头部工具栏扩展的右侧图标。')
+			  }
+			});
+		});
+	})
+</script>
+</body>
+</html>

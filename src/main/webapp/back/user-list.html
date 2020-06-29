@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>用户列表</title>
+  <link rel="stylesheet" href="lib/layui/css/layui.css" media="all">
+  <style>
+	  #app{
+		  position: relative;
+	  }
+	  #app>#appx{
+		  position: absolute;
+		  right: 120px;
+	  }
+	  #app>#appy{
+		  position: absolute;
+	  	  right: 20px;
+	  }
+  </style>
+  <script src="js/jquery.min.js"></script>
+</head>
+<body>
+	<!-- <div class="layui-fluid">
+	    <div class="layui-row layui-col-space15">
+	        <div class="layui-col-md12">
+	            <div class="layui-card">
+	                <div class="layui-card-body ">
+	                    <form class="layui-form layui-col-space5">
+	                         <div class="layui-card-header" id="app">
+								<div class="layui-inline layui-show-xs-block">
+									<input type="text" name="usernamex"  placeholder="请输入用户名" autocomplete="off" class="layui-input">
+								</div>
+								<div class="layui-inline layui-show-xs-block">
+									<button class="layui-btn"  lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
+								</div>
+								<button id="appx" class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除</button>
+								<button id="appy" type="button" class="layui-btn"><i class="layui-icon"></i>添加</button>
+							</div>
+	                    </form>
+	                </div>
+				</div>
+			</div>
+		</div>
+	</div>            -->   
+ <table id="demo" lay-filter="test"></table>
+ 
+ <!-- <div id="test1" style="text-align: center;"></div> -->
+
+ <!-- <script type="text/html" id="barDemo">
+   <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+   <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+ </script> -->
+<script src="lib/layui/layui.all.js"></script>
+<script>
+	$(function(){
+		layui.use(['table','laypage'], function(){
+		  var table = layui.table;
+		  var laypage = layui.laypage;
+		  //这是分页显示信息
+		  table.render({
+			  elem: '#demo'
+			  ,url: 'http://localhost:8080/shopping/User?type=listUser' //数据接口
+			  ,toolbar: '<div>查看用户列表</div>' 
+			  ,page:true
+			  ,parseData: function(res){ //res 即为原始返回的数据
+			  console.log(res)
+			      return {
+			        "code": res.status, //解析接口状
+			        "data": res.data.list ,//解析数据列表
+					"count": res.data.total
+			      };
+			  }
+			 ,response: {
+			    statusCode: 0 //规定成功的状态码，默认：0
+			  } 
+			  ,limits:[5,8,10,12]
+			  ,cols: [[ //表头
+			  /* {field: 'left',type:'checkbox',align:'center',fixed: 'left'} */
+				{field: 'userId', title: 'ID', sort: true,fixed:'left'}
+				,{field: 'userName', title: '用户名'}
+				,{field: 'passWord', title: '密码'}
+				,{field: 'telephone', title: '手机'} 
+				,{field: 'email', title: '邮箱'}
+				,{field: 'role', title: '用户角色'}
+				,{field: 'question', title: '密保问题'}
+				,{field: 'answer', title: '密保答案'}
+				,{field: 'createTime', title: '创建时间'}
+				,{field: 'updateTime',title: '更新时间'}
+				/* ,{fixed: 'right', align:'center', toolbar: '#barDemo',title: '操作'} //这里的toolbar值是模板元素的选择器 */
+			  ]]
+			});
+			//根据username查找用户
+			/* form.on('submit(search)', function(data){
+				let keyword=$("[name='productNamex']").val()
+				//数据表格重载
+				table.reload('demotable', {
+					page: {
+						curr: 1 //重新从第 1 页开始
+					}
+					, where: {//这里传参  向后台
+						'keyword': keyword
+					}
+					, url: 'http://ser.zuoxinlei.top:38000/shopping/Product?type=search'//后台做模糊搜索接口路径
+					, method: 'post'
+				});
+				return false;//false：阻止表单跳转  true：表单跳转
+			}); */
+		});
+		//这个是显示弹出添加的页面
+		/* $("#appy").click(function(){
+			layui.use('layer', function(){
+			  var layer = layui.layer;
+			  layer.open({
+				  type:2,
+				  title:'添加用户',
+				  content:'user-add.html'
+				  //area:'600px'
+			  })
+			}); 
+		}) */
+	})
+
+</script>
+</body>
+</html>

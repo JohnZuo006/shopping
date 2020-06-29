@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="sim/simditor.css" />
+		
+		<script type="text/javascript" src="sim/jquery.min.js"></script>
+		<script type="text/javascript" src="sim/module.js"></script>
+		<script type="text/javascript" src="sim/hotkeys.js"></script>
+		<script type="text/javascript" src="sim/uploader.js"></script>
+		<script type="text/javascript" src="sim/simditor.js"></script>
+	</head>
+	<body>
+		<textarea id="editor" placeholder="Balabala" autofocus></textarea>
+		<button id="btn">submit</button>
+		
+		
+		<p>法法是阿大V啊啊&nbsp;</p>
+		<pre>
+			<code class="lang-js">&lt;script&gt;
+				$(function(){
+					var editor = new Simditor({
+					&nbsp; textarea: $('#editor')
+					&nbsp; //optional options
+					});
+					
+					$('#btn').click(()=&gt;{
+						let value = editor.getValue()
+						console.log(value)
+					})
+				})
+			&lt;/script&gt;<br>
+			</code>
+		</pre>
+		<p><img alt="Image" src="https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=151472226,3497652000&amp;fm=26&amp;gp=0.jpg" width="256" height="179.2"><br></p>
+		
+		
+		
+		
+		
+		
+		
+	</body>
+	<script>
+		$(function(){
+			var editor = new Simditor({
+			  textarea: $('#editor')
+			  //optional options
+			});
+			
+			$('#btn').click(()=>{
+				let value = editor.getValue()
+				console.log(value)
+			})
+		})
+	</script>
+</html>
