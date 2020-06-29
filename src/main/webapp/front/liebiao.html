@@ -25,7 +25,7 @@
 			function toPage(curr){
 				$.ajax({
 					type:"get",
-					url:"http://localhost:8080/shop/Product",
+					url:"http://localhost:8080/shopping/Product",
 					async: false,
 					data:{
 						"type":"searchCategory",
@@ -98,7 +98,7 @@
 			
 		$.ajax({
 			type:"get",
-			url:"http://localhost:8080/shop/User",
+			url:"http://localhost:8080/shopping/User",
 			data:{
 				"type":"getInformation"
 			},
@@ -124,7 +124,7 @@
 		    $("#out").click(function(){
 					$.ajax({
 						type:"get",
-						url:"http://localhost:8080/shop/User",
+						url:"http://localhost:8080/shopping/User",
 						data:{
 							"type":"loginOut"
 						},
