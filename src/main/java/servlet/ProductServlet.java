@@ -73,6 +73,8 @@ public class ProductServlet extends HttpServlet {
 				simplesearch(request, response);
 			else if(type.equals("delete"))
 				delete_product(request, response);
+			else if(type.equals("searchCategory"))
+				searchCategory(request, response);
 		}
 	}
 
@@ -324,6 +326,34 @@ public class ProductServlet extends HttpServlet {
 		ProductServiceImpl ps = new ProductServiceImpl();
 		ServerResponse<Product> sr = new ServerResponse<Product>();
 		sr=ps.delete_product_logic(productid);
+		Gson gson = new Gson();
+		String json = gson.toJson(sr);
+
+		PrintWriter pw = null;
+		try {
+			pw = response.getWriter();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		pw.write(json);
+		pw.close();
+	}
+	public void searchCategory(HttpServletRequest request, HttpServletResponse response){
+		String categoryid = request.getParameter("categoryid");
+		String pageSize = request.getParameter("pageSize");
+		String pageNum = request.getParameter("pageNum");
+
+		if (pageNum == null || pageNum == "") {
+			pageNum = "1";
+		}
+		if (pageSize == null || pageSize == "") {
+			pageSize = "10";
+		}
+
+		ProductServiceImpl us = new ProductServiceImpl();
+		ServerResponse<Page<List<Product>>> sr = us.searchCategory_logic(categoryid, Integer.parseInt(pageSize),
+				Integer.parseInt(pageNum));
+
 		Gson gson = new Gson();
 		String json = gson.toJson(sr);
 

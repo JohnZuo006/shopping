@@ -236,5 +236,71 @@ public class ProductServiceImpl implements ProductService {
 		}
 		return resp;
 	}
- 
+	@Override
+	public ServerResponse<Page<List<Product>>> searchCategory_logic(String categoryid, int pageSize, int pageNum) {
+		// TODO Auto-generated method stub
+		ServerResponse<Page<List<Product>>> sr = new ServerResponse<Page<List<Product>>>();
+		if(categoryid == "") {
+			sr.setStatus(1);
+			sr.setMsg("关键词为空");
+		}else {
+			//String[] keys=keyword.split(" ");  多关键词,以空格间隔
+			// 获取数据库中数据总数
+			String sql = "select count(*) as count from product where categoryId=?";
+			int sum = JdbcUtil.getSum(sql,categoryid);
+			if(sum!=0) {
+				// 计算分页总数
+				int pages = sum % pageSize == 0 ? sum / pageSize : (sum / pageSize) + 1;
+				System.out.println("pages=" + pages);
+				System.out.println("sum=" + sum);
+				// 计算当前页的开始行和结束行
+				int startRow = (pageNum - 1) * pageSize;
+				int endRow = startRow + pageSize > sum ? sum : startRow + pageSize;
+				// 获取当前页的数据
+				
+				String sql2 = "select * from product where categoryId=? limit ?,?";
+				List<Product> list = JdbcUtil.executeQuery(sql2, Product.class,categoryid, startRow, pageSize);
+
+				// 将数据赋值到page里面
+				Page<List<Product>> page = new Page<List<Product>>();
+				page.setPages(pages);
+				page.setTotal(sum);
+				page.setEndRow(endRow);
+				page.setStartRow(startRow);
+				page.setList(list);
+				page.setPageNum(pageNum);
+				page.setPageSize(pageSize);
+				page.setFirstPage(1);
+				page.setLastPage(pages);
+				// 判断分页的前后是否还有页
+				if (pageNum == 1) {
+					page.setFirstPage(true);
+					page.setPrePage(0);
+					page.setLastPage(false);
+					page.setNextPage(pageNum + 1);
+					page.setHasNextPage(true);
+					page.setHasPreviousPage(false);
+				} else if (pageNum == pages) {
+					page.setFirstPage(false);
+					page.setLastPage(true);
+					page.setPrePage(pageNum - 1);
+					page.setNextPage(0);
+					page.setHasNextPage(false);
+					page.setHasPreviousPage(true);
+				} else {
+					page.setFirstPage(false);
+					page.setLastPage(false);
+					page.setPrePage(pageNum - 1);
+					page.setNextPage(pageNum + 1);
+				}
+				sr.setStatus(0);
+				sr.setData(page);
+			}else {
+				sr.setStatus(1);
+				sr.setMsg("未查询到相关产品");
+			}
+		}
+
+		return sr;
+	}
 }

@@ -230,8 +230,8 @@ public class AddressServlet extends HttpServlet {
 		}
 		else
 		{
-			String pageSize=request.getParameter("pageSize");
-			String pageNum=request.getParameter("pageNum");
+			String pageSize=request.getParameter("limit");
+			String pageNum=request.getParameter("page");
 			if(pageSize==null||pageSize=="")
 			{
 				pageSize="10";

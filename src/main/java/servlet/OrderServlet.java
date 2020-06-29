@@ -163,8 +163,8 @@ public class OrderServlet extends HttpServlet {
 	private void admin_list_order(HttpServletRequest request, HttpServletResponse response)
 	{
 		ServerResponse<Page<List<Order>>> sr= new ServerResponse<>();
-		String userId=(String) request.getSession().getAttribute("userid");
-		//userId="1";//测试用
+		//String userId=request.getSession().getAttribute("userid").toString();
+		String userId="1";//测试用
 		if(userId==null||userId=="")
 		{
 			sr.setStatus(2);

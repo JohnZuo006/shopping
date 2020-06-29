@@ -148,7 +148,7 @@ public void login(HttpServletRequest request, HttpServletResponse response) {  /
 		
 		String newPassword = request.getParameter("passwordNew");
 		String oldPassword = request.getParameter("passwordOld");
-		String username = (String) request.getSession().getAttribute("username");
+		String username = request.getSession().getAttribute("username").toString();
 		UserServiceImpl us = new UserServiceImpl();
 
 		ServerResponse<User> sr = us.changePassword_logic(username, oldPassword, newPassword);
@@ -167,7 +167,7 @@ public void login(HttpServletRequest request, HttpServletResponse response) {  /
 
 	public void checkAnswer(HttpServletRequest request, HttpServletResponse response) { // 验证密保问题
 		
-		String username = (String) request.getSession().getAttribute("username");
+		String username = request.getSession().getAttribute("username").toString();
 		//String username = request.getParameter("username");
 		String question = request.getParameter("question");
 		String answer = request.getParameter("answer");
@@ -209,7 +209,7 @@ public void login(HttpServletRequest request, HttpServletResponse response) {  /
 
 	public void changeInformation(HttpServletRequest request, HttpServletResponse response) {// 更改个人信息
 		
-		String username=(String) request.getSession().getAttribute("username");
+		String username= request.getSession().getAttribute("username").toString();
 		//String username=request.getParameter("username");
 		//user.setPassWord(request.getParameter("password"));
 		String telephone=request.getParameter("telephone");
@@ -237,7 +237,7 @@ public void login(HttpServletRequest request, HttpServletResponse response) {  /
 	public void getInformation(HttpServletRequest request, HttpServletResponse response) {// 查看个人信息
 		
 		//String username = request.getParameter("username");
-		String username=(String) request.getSession().getAttribute("username");
+		String username=request.getSession().getAttribute("username").toString();
 		UserServiceImpl us = new UserServiceImpl();
 		ServerResponse<User> sr = us.getinformation_logic(username);
 		System.out.println("get:"+username);
@@ -277,7 +277,7 @@ public void login(HttpServletRequest request, HttpServletResponse response) {  /
 
 	public void loginOut(HttpServletRequest request, HttpServletResponse response) {// 退出登录
 		
-		String username = (String) request.getSession().getAttribute("username");
+		String username =request.getSession().getAttribute("username").toString();
 		request.getSession().removeAttribute(username);
 		request.getSession().invalidate();
 		ServerResponse<User> sr =new ServerResponse<User>();
@@ -323,7 +323,7 @@ public void login(HttpServletRequest request, HttpServletResponse response) {  /
 	
 	public void changeQuestion(HttpServletRequest request, HttpServletResponse response) { //更改密保问题
 		
-		String username=(String) request.getSession().getAttribute("username");
+		String username=request.getSession().getAttribute("username").toString();
 		String question=request.getParameter("question");
 		String answer=request.getParameter("answer");
 		UserServiceImpl us = new UserServiceImpl();
@@ -366,10 +366,8 @@ public void login(HttpServletRequest request, HttpServletResponse response) {  /
 	public void listUser(HttpServletRequest request, HttpServletResponse response) {
 		// 用户列表
 		ServerResponse<Page<List<User>>> sr = new ServerResponse<Page<List<User>>>();
-		String userId=(String) request.getSession().getAttribute("userid");
-		userId="1";//测试用
-		System.out.println(userId);
-		System.out.println(request.getSession().toString());
+		//String userId=(String) request.getSession().getAttribute("userid");
+		String userId="1";//测试用
 		if(userId==null||userId=="")
 		{
 			sr.setStatus(1);

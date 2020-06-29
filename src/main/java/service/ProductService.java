@@ -23,4 +23,6 @@ public interface ProductService {
 	public ServerResponse<List<Product>> simplesearch_logic(String keyword);
 	
 	public ServerResponse<Product> delete_product_logic(String productId);
+	
+	public ServerResponse<Page<List<Product>>> searchCategory_logic(String categoryid,int pageSize,int pageNum);
 }
