@@ -108,15 +108,14 @@
 			<a href="index.html"><div class="ad_top fl"></div></a>
 			<div class="nav fl">
 				<ul>
-					<li><a href="">小米手机</a></li>
-					<li><a href="">红米</a></li>
-					<li><a href="">平板·笔记本</a></li>
-					<li><a href="">电视</a></li>
-					<li><a href="">盒子·影音</a></li>
-					<li><a href="">路由器</a></li>
-					<li><a href="">智能硬件</a></li>
-					<li><a href="">服务</a></li>
-					<li><a href="">社区</a></li>
+					<li><a href="./liebiao.html?categoryid=26" >手机</a></li>
+					<li><a href="./liebiao.html?categoryid=32" >智能穿戴</a></li>
+					<li><a href="./liebiao.html?categoryid=28" >电视</a></li>
+					<li><a href="./liebiao.html?categoryid=29" >笔记本</a></li>
+					<li><a href="./liebiao.html?categoryid=33" >配件</a></li>
+					<li><a href="./liebiao.html?categoryid=35" >耳机音箱</a></li>
+					<li><a href="./liebiao.html?categoryid=31" >出行</a></li>
+					<li><a href="./liebiao.html?categoryid=36" >生活箱包</a></li>
 				</ul>
 			</div>
 			<div class="search fr">
@@ -125,7 +124,7 @@
 						<input type="text" class="shuru" id="keyword" placeholder="小米6&nbsp;小米MIX现货">
 					</div>
 					<div class="submit fl">
-						<input type="submit" id="search" class="sousuo" value="搜索"/>
+						<input type="button" id="search" class="sousuo" value="搜索"/>
 					</div>
 					<div class="clear"></div>
 				</form>
@@ -141,7 +140,7 @@
 			<div class="subddzx">
 				<ul>
 					<li><a href="./dingdanzhongxin.html" >我的订单</a></li>
-					<li><a href="">待收货</a></li>
+					<li><a href="./dingdandsh.html">待收货</a></li>
 					<li><a href="">评价晒单</a></li>
 					<li><a href="">退款/售后</a></li>
 				</ul>
@@ -157,42 +156,11 @@
 			</div>
 		</div>
 		<div class="rtcont fr">
-			<div class="grzlbt ml40"><span><a href="address.html">&lt;返回&nbsp;&nbsp;</a></span><span><a href="">&nbsp;&nbsp;添加地址&nbsp;&nbsp;</a></span></div>
+			<div class="grzlbt ml40"><span><a href="address.html">&lt;返回&nbsp;&nbsp;</a></span><span>&nbsp;&nbsp;添加地址&nbsp;&nbsp;</span></div>
 			
           <!-- 在此处编辑 -->
-<div style="height: 38px; width: 800px; position: absolute; top:45%; right: 14.15%;">
-	<script language="javascript" src="province.js" type="text/javascript" charset="utf-8"></script>
-<div style="float:left; width:200px; ">
-	<select id="province" onchange="chooseProvince(this)" style=" height:40px;   width:180px; border-color: #e6e6e6; color: #8D8D8D;">
-		<option value="1" id="provinces">请选择省</option>
-	</select>
-	<div id="pp"></div>
-</div>
-
-<div style="float:left; width:200px; " >
-	<select  id="city" onchange="chooseCity(this)" style=" height:40px;   width:180px; border-color: #e6e6e6; color: #8D8D8D;">
-		<option value="2" id="citys">请选择市</option>
-	</select>
-	<div id="cc"></div>
-</div>
-
-<div style="float:left; width:200px; ">
-	<select  id="area" onchange="chooseArea(this)" style=" height:40px;   width:180px; border-color: #e6e6e6; color: #8D8D8D;">
-		<option value="3" id="areas">请选择区</option>
-	</select>	
-	<div id="aa"></div>
-</div>
-
-</div>
-
-
 
 				<!--  <form class="layui-form" action="" method="">-->
-
-
-
-					
-
 					<div class="layui-form-item">
 						<label class="layui-form-label">姓名</label>
 						<div class="layui-input-inline">
@@ -211,6 +179,30 @@
 					</div>
 					<div class="layui-form-item">
 						<label class="layui-form-label">所在地区</label>
+						<div style="height: 38px; width: 800px;">
+							<script language="javascript" src="province.js" type="text/javascript" charset="utf-8"></script>
+						<div style="float:left; width:200px; ">
+							<select id="province" onchange="chooseProvince(this)" style=" height:40px;   width:180px; border-color: #e6e6e6; color: #8D8D8D;">
+								<option value="1" id="provinces">请选择省</option>
+							</select>
+							<div id="pp"></div>
+						</div>
+						
+						<div style="float:left; width:200px; " >
+							<select  id="city" onchange="chooseCity(this)" style=" height:40px;   width:180px; border-color: #e6e6e6; color: #8D8D8D;">
+								<option value="2" id="citys">请选择市</option>
+							</select>
+							<div id="cc"></div>
+						</div>
+						
+						<div style="float:left; width:200px; ">
+							<select  id="area" onchange="chooseArea(this)" style=" height:40px;   width:180px; border-color: #e6e6e6; color: #8D8D8D;">
+								<option value="3" id="areas">请选择区</option>
+							</select>	
+							<div id="aa"></div>
+						</div>
+						
+						</div>
 					</div>
 					<div class="layui-form-item">
 						<label class="layui-form-label">邮政编码</label>

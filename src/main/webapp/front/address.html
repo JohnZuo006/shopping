@@ -103,15 +103,14 @@
 			<a href="index.html"><div class="ad_top fl"></div></a>
 			<div class="nav fl">
 				<ul>
-					<li><a href="">小米手机</a></li>
-					<li><a href="">红米</a></li>
-					<li><a href="">平板·笔记本</a></li>
-					<li><a href="">电视</a></li>
-					<li><a href="">盒子·影音</a></li>
-					<li><a href="">路由器</a></li>
-					<li><a href="">智能硬件</a></li>
-					<li><a href="">服务</a></li>
-					<li><a href="">社区</a></li>
+					<li><a href="./liebiao.html?categoryid=26" >手机</a></li>
+					<li><a href="./liebiao.html?categoryid=32" >智能穿戴</a></li>
+					<li><a href="./liebiao.html?categoryid=28" >电视</a></li>
+					<li><a href="./liebiao.html?categoryid=29" >笔记本</a></li>
+					<li><a href="./liebiao.html?categoryid=33" >配件</a></li>
+					<li><a href="./liebiao.html?categoryid=35" >耳机音箱</a></li>
+					<li><a href="./liebiao.html?categoryid=31" >出行</a></li>
+					<li><a href="./liebiao.html?categoryid=36" >生活箱包</a></li>
 				</ul>
 			</div>
 			<div class="search fr">
@@ -120,7 +119,7 @@
 						<input type="text" class="shuru" id="keyword" placeholder="小米6&nbsp;小米MIX现货">
 					</div>
 					<div class="submit fl">
-						<input type="submit" id="search" class="sousuo" value="搜索"/>
+						<input type="button" id="search" class="sousuo" value="搜索"/>
 					</div>
 					<div class="clear"></div>
 				</form>
@@ -189,7 +188,8 @@ $(function(){
     ,response:{
     	statusCode:0 
     }
-    ,limits:[5,8,10,12]
+    ,limit:5
+    ,limits:[3,5,8]
      /* ,defaultToolbar: ['filter', 'exports', 'print', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
       title: '提示'
       ,layEvent: 'LAYTABLE_TIPS'

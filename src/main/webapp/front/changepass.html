@@ -125,7 +125,10 @@
 					}
 					
 				})
-
+				$("#search").click(function(){
+					let keyword = $("#keyword").val()
+					window.location.href="search.html?keyword="+keyword
+				})
 			})
 		</script>
 	</head>
@@ -155,19 +158,18 @@
 	<!--end header -->
 	<!-- start banner_x -->
 		<div class="banner_x center">
-			<a href="./index.html" target="_blank"><div class="logo fl"></div></a>
+
 			<a href=""><div class="ad_top fl"></div></a>
 			<div class="nav fl">
-				<ul>
-					<li><a href="">小米手机</a></li>
-					<li><a href="">红米</a></li>
-					<li><a href="">平板·笔记本</a></li>
-					<li><a href="">电视</a></li>
-					<li><a href="">盒子·影音</a></li>
-					<li><a href="">路由器</a></li>
-					<li><a href="">智能硬件</a></li>
-					<li><a href="">服务</a></li>
-					<li><a href="">社区</a></li>
+					<ul>
+					<li><a href="./liebiao.html?categoryid=26" >手机</a></li>
+					<li><a href="./liebiao.html?categoryid=32" >智能穿戴</a></li>
+					<li><a href="./liebiao.html?categoryid=28" >电视</a></li>
+					<li><a href="./liebiao.html?categoryid=29" >笔记本</a></li>
+					<li><a href="./liebiao.html?categoryid=33" >配件</a></li>
+					<li><a href="./liebiao.html?categoryid=35" >耳机音箱</a></li>
+					<li><a href="./liebiao.html?categoryid=31" >出行</a></li>
+					<li><a href="./liebiao.html?categoryid=36" >生活箱包</a></li>
 				</ul>
 			</div>
 			<div class="search fr">
@@ -176,7 +178,7 @@
 						<input type="text" class="shuru"  placeholder="小米6&nbsp;小米MIX现货">
 					</div>
 					<div class="submit fl">
-						<input type="submit" class="sousuo" value="搜索"/>
+						<input type="button" id="search" class="sousuo" value="搜索"/>
 					</div>
 					<div class="clear"></div>
 				</form>
@@ -208,7 +210,7 @@
 			</div>
 		</div>
 		<div class="rtcont fr">
-			<div class="grzlbt ml40"><span><a href="changepass.html">修改密码&nbsp;&nbsp;</a></span><span><a href="changeanswer.html">&nbsp;&nbsp;修改密保</a></span></div>
+			<div class="grzlbt ml40"><span><a href="self_info.html">&lt;返回&nbsp;&nbsp;</a></span><span>修改密码&nbsp;&nbsp;</span><span><a href="changeanswer.html">&nbsp;&nbsp;修改密保</a></span></div>
 			<div class="ff">请输入原密码</div>
 			<div ><input type="text" id="oldpass" class="subgrzl ml40"></div>
 			<div class="ff">请输入新密码</div>

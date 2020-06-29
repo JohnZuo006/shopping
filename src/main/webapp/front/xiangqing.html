@@ -74,6 +74,7 @@
 					}
 				})
 				let max = 1
+				let pric = 0
 				$.ajax({
 					type:"get",
 					url:"http://localhost:8080/shopping/Product",
@@ -93,6 +94,7 @@
 							//$("#detail").html(res.data.detail)
 							$("#subtitle").html(res.data.productSubtitle)
 							$("#price").html(res.data.price)
+							pric=res.data.price
 							$("#allprice").html("总价:"+res.data.price)
 							$("#stock").html(res.data.stock)
 							$("#image").html('<img src="'+res.data.mainImage+'">')	
@@ -109,20 +111,23 @@
 				})
 				
 				let t = $('#quantity')/*  数量显示框*/
-	            $('#add').click(function(){
+	           $('#add').click(function(){
 		             if(t.val()<max){/* 数量最大不能超过商品库存量 */
 		            	t.val(parseInt(t.val())+1)
-		                
+		                $("#allprice").html("总价:"+(pric*t.val()).toFixed(2))
 		             }else{
 		               	t.val(max)
+		               	$("#allprice").html("总价:"+(pric*t.val()).toFixed(2))
 		               	alert("已超过库存量!")
 		             }
 	            })
 	            $('#sub').click(function(){
 		             if(t.val()<=1){	/*数量最少为1  */
 			             t.val(1)
+			             $("#allprice").html("总价:"+(pric*t.val()).toFixed(2))
 		             }else{
 			             t.val(parseInt(t.val())-1)
+			             $("#allprice").html("总价:"+(pric*t.val()).toFixed(2))
 		             }
 	            })
 				$("#join").click(function(){
@@ -222,15 +227,14 @@
 			<a href="index.html"><div class="ad_top fl"></div></a>
 			<div class="nav fl">
 				<ul>
-					<li><a href="">小米手机</a></li>
-					<li><a href="">红米</a></li>
-					<li><a href="">平板·笔记本</a></li>
-					<li><a href="">电视</a></li>
-					<li><a href="">盒子·影音</a></li>
-					<li><a href="">路由器</a></li>
-					<li><a href="">智能硬件</a></li>
-					<li><a href="">服务</a></li>
-					<li><a href="">社区</a></li>
+					<li><a href="./liebiao.html?categoryid=26" >手机</a></li>
+					<li><a href="./liebiao.html?categoryid=32" >智能穿戴</a></li>
+					<li><a href="./liebiao.html?categoryid=28" >电视</a></li>
+					<li><a href="./liebiao.html?categoryid=29" >笔记本</a></li>
+					<li><a href="./liebiao.html?categoryid=33" >配件</a></li>
+					<li><a href="./liebiao.html?categoryid=35" >耳机音箱</a></li>
+					<li><a href="./liebiao.html?categoryid=31" >出行</a></li>
+					<li><a href="./liebiao.html?categoryid=36" >生活箱包</a></li>
 				</ul>
 			</div>
 			<div class="search fr">
@@ -239,7 +243,7 @@
 						<input type="text" id="keyword" class="shuru"  placeholder="请输入关键词">
 					</div>
 					<div class="submit fl">
-						<input type="submit" id="search"  class="sousuo" value="搜索"/>
+						<input type="button" id="search"  class="sousuo" value="搜索"/>
 					</div>
 					<div class="clear"></div>
 				</form>
