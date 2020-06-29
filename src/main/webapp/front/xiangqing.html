@@ -100,9 +100,9 @@
 							pric=res.data.price
 							$("#allprice").html("总价:"+res.data.price)
 							$("#stock").html(res.data.stock)
-							$("#image").html('<img src="'+res.data.mainImage+'">')	
+							$("#image").html('<img style="width:560px;" src="'+res.data.mainImage+'">')	
 							max = res.data.stock
-							let div=$('<div style="font-size:18px;text-align:center;">111'+res.data.detail+'</div>')
+							let div=$('<div style="font-size:18px;text-align:center;"><br><h2>商品详情</h2><br>'+res.data.detail+'</div>')
 							$("#detail").append(div)
 						}
 					},
