@@ -75,6 +75,8 @@ public class ProductServlet extends HttpServlet {
 				delete_product(request, response);
 			else if(type.equals("searchCategory"))
 				searchCategory(request, response);
+			else if(type.equals("updateDetail"))
+				updateDetail(request, response);
 		}
 	}
 
@@ -210,10 +212,9 @@ public class ProductServlet extends HttpServlet {
 		String subimages=request.getParameter("subimages");
 		if(subimages==null||subimages=="")
 		{
-			subimages=request.getParameter("mainImage");
+			subimages=request.getParameter("subImages");
 		}
 		product.setSubImages(subimages);
-		product.setDetail(request.getParameter("detail"));
 		BigDecimal price = new BigDecimal(request.getParameter("price"));
 		price = price.setScale(2, BigDecimal.ROUND_HALF_UP); // 小数2位,四舍五入
 		product.setPrice(price);
@@ -354,6 +355,25 @@ public class ProductServlet extends HttpServlet {
 		ServerResponse<Page<List<Product>>> sr = us.searchCategory_logic(categoryid, Integer.parseInt(pageSize),
 				Integer.parseInt(pageNum));
 
+		Gson gson = new Gson();
+		String json = gson.toJson(sr);
+
+		PrintWriter pw = null;
+		try {
+			pw = response.getWriter();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		pw.write(json);
+		pw.close();
+	}
+	public void updateDetail(HttpServletRequest request, HttpServletResponse response){
+		String productId=request.getParameter("productId");
+		String detail=request.getParameter("detail");
+		ServerResponse<Product> sr=new ServerResponse<Product>();
+		ProductServiceImpl ps=new ProductServiceImpl();
+		sr=ps.update_detail_logic(productId, detail);
+		
 		Gson gson = new Gson();
 		String json = gson.toJson(sr);
 

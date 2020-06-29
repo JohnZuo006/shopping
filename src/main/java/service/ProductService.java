@@ -25,4 +25,6 @@ public interface ProductService {
 	public ServerResponse<Product> delete_product_logic(String productId);
 	
 	public ServerResponse<Page<List<Product>>> searchCategory_logic(String categoryid,int pageSize,int pageNum);
+	
+	public ServerResponse<Product> update_detail_logic(String productId,String detail);
 }

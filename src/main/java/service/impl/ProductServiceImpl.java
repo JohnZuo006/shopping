@@ -1,9 +1,11 @@
 package service.impl;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import common.Category;
 import common.Product;
 import common.ServerResponse;
 import jdbcUtil.JdbcUtil;
@@ -105,8 +107,11 @@ public class ProductServiceImpl implements ProductService {
 	public ServerResponse<Product> update_logic(Product product) {
 		// TODO Auto-generated method stub
 		 ServerResponse<Product> sr = new ServerResponse<Product>();
-		String sql = "update product set categoryId=?,productName=?,productSubtitle=?,mainImage=?,subImages=?,detail=?,price=?,stock=?,productStatus=? where productId=?";
-		int i=JdbcUtil.executeUpdate(sql, product.getCategoryId(),product.getProductName(),product.getProductSubtitle(),product.getMainImage(),product.getSubImages(),product.getDetail(),product.getPrice(),product.getStock(),product.getProductStatus(),product.getProductId());
+		String sql = "update product set categoryId=?,productName=?,productSubtitle=?,"
+				+ "mainImage=?,subImages=?,price=?,stock=?,productStatus=? where productId=?";
+		int i=JdbcUtil.executeUpdate(sql, product.getCategoryId(),product.getProductName(),
+				product.getProductSubtitle(),product.getMainImage(),product.getSubImages(),
+				product.getPrice(),product.getStock(),product.getProductStatus(),product.getProductId());
 		if(i==1)
 		{
 			sr.setStatus(0);
@@ -236,6 +241,31 @@ public class ProductServiceImpl implements ProductService {
 		}
 		return resp;
 	}
+	public String listToString(List list, char separator) {    
+		StringBuilder sb = new StringBuilder();    
+		for (int i = 0; i < list.size(); i++) {        
+			if (i == list.size() - 1) {            
+		sb.append(list.get(i));        
+		} else {            
+		sb.append(list.get(i));            
+		sb.append(separator);        
+		}	
+		}    
+	return sb.toString();}
+	private List<String> getSonId(int parentId)
+	{
+		List<String> re= new ArrayList<String>();
+		List<Category> list=new ArrayList<Category>();
+		list.clear();
+		String sql2="select * from category where parentId=?";
+		list=JdbcUtil.executeQuery(sql2, Category.class, parentId);
+		for(Category category:list)
+		{
+			re.add(Integer.toString(category.getCategoryId()));
+			re.addAll(getSonId(category.getCategoryId()));
+		}
+		return re;
+	}
 	@Override
 	public ServerResponse<Page<List<Product>>> searchCategory_logic(String categoryid, int pageSize, int pageNum) {
 		// TODO Auto-generated method stub
@@ -244,10 +274,14 @@ public class ProductServiceImpl implements ProductService {
 			sr.setStatus(1);
 			sr.setMsg("关键词为空");
 		}else {
+			List<String> catess=getSonId(Integer.parseInt(categoryid));
+			catess.add(categoryid);
+			String cates=listToString(catess, ',');
+			System.out.println(cates);
 			//String[] keys=keyword.split(" ");  多关键词,以空格间隔
 			// 获取数据库中数据总数
-			String sql = "select count(*) as count from product where categoryId=?";
-			int sum = JdbcUtil.getSum(sql,categoryid);
+			String sql = "select count(*) as count from product where categoryId in("+cates+")";
+			int sum = JdbcUtil.getSum(sql);
 			if(sum!=0) {
 				// 计算分页总数
 				int pages = sum % pageSize == 0 ? sum / pageSize : (sum / pageSize) + 1;
@@ -258,8 +292,8 @@ public class ProductServiceImpl implements ProductService {
 				int endRow = startRow + pageSize > sum ? sum : startRow + pageSize;
 				// 获取当前页的数据
 				
-				String sql2 = "select * from product where categoryId=? limit ?,?";
-				List<Product> list = JdbcUtil.executeQuery(sql2, Product.class,categoryid, startRow, pageSize);
+				String sql2 = "select * from product where categoryId in("+cates+") limit ?,?";
+				List<Product> list = JdbcUtil.executeQuery(sql2, Product.class,startRow, pageSize);
 
 				// 将数据赋值到page里面
 				Page<List<Product>> page = new Page<List<Product>>();
@@ -302,5 +336,23 @@ public class ProductServiceImpl implements ProductService {
 		}
 
 		return sr;
+	}
+	@Override
+	public ServerResponse<Product> update_detail_logic(String productId, String detail) {
+		// TODO Auto-generated method stub
+		ServerResponse<Product> resp=new ServerResponse<Product>();
+		String sql="update product set detail=? where productId=?";
+		int re=JdbcUtil.executeUpdate(sql, detail,productId);
+		if(re==1)
+		{
+			resp.setStatus(0);
+			resp.setMsg("更新成功");
+		}
+		else
+		{
+			resp.setStatus(1);
+			resp.setMsg("更新失败");
+		}
+		return resp;
 	}
 }
