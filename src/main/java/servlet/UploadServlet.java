@@ -90,7 +90,7 @@ public class UploadServlet extends HttpServlet {
                 }                
             }    
             ServerResponse<String> sr = new ServerResponse<>();
-            String url="http://ser.zuoxinlei.top:38000/Uploadpic/"+fn;
+            String url="http://localhost:8080/Uploadpic/"+fn;
             sr.setStatus(0);
             sr.setData(url);
     		Gson gson = new Gson();
